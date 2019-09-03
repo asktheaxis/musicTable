@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText edtArtist, edtAlbum, edtYear, edtStyle;
-    private Button fuckYeah;
+    private Button btnSave;
     private static final String RECORDS_ENDPOINT = "http://localhost:3003/my-channel";
     private RecordsAdapter recordAdapter;
 
@@ -43,9 +43,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             edtYear = (EditText)findViewById(R.id.edtYear);
             edtStyle = (EditText)findViewById(R.id.edtStyle);
 
-        fuckYeah = (Button)findViewById(R.id.BtnSave);
+        btnSave = (Button)findViewById(R.id.BtnSave);
 
-        fuckYeah.setOnClickListener(this);
+        btnSave.setOnClickListener(this);
 
         recordAdapter = new RecordsAdapter(this, new ArrayList<Record>());
         final ListView recordsView = (ListView)findViewById(R.id.records_view);
