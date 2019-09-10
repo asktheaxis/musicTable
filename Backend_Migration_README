@@ -1,0 +1,5 @@
+9/10/2019 created this branch to start figuring out what to use for our backend.
+
+So far, Firebase seems like a good candidate. 
+Amazon Web Services would also be a good option, but given both are free for now I am assuming Firebase
+will be easier to integrate with Google stuff. 
