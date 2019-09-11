@@ -1,7 +1,7 @@
 # musicTable
 Simple table that updates in real time for all users
 
-Team RECO:
+Team RECO:\n
 Alex Chrystal,
 Rob Ruwe,
 Kate Sommer,
