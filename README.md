@@ -1,10 +1,10 @@
 # musicTable
 Simple table that updates in real time for all users
 
-Alex Chrystal
-Rob Ruwe
-Kate Sommer
-John Turner
+Alex Chrystal,
+Rob Ruwe,
+Kate Sommer,
+John Turner,
 
 The primary goals of this project will be to; complete an Android application that gives 
 users a fun and interactive environment to recommend their favorite TV shows, albums, etc. 
