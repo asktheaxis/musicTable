@@ -35,46 +35,48 @@
                     android:text="Add a great album!"/>
 
                 <EditText
-                    android:background="@drawable/buttonstyle"
-                    android:layout_margin="8dp"
                     android:id="@+id/edtArtist"
-                    android:padding="8dp"
-                    android:fontFamily="serif"
-                    android:textColor="#fff"
-                    android:hint="Artist"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/holo_blue_light"
+                    android:fontFamily="serif"
+                    android:hint="Artist"
+                    android:padding="8dp"
+                    android:textColor="#fff" />
 
                 <EditText
-                    android:padding="8dp"
-                    android:background="@drawable/buttonstyle"
-                    android:layout_margin="8dp"
                     android:id="@+id/edtAlbum"
-                    android:fontFamily="serif"
-                    android:textColor="#fff"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/holo_blue_light"
+                    android:fontFamily="serif"
                     android:hint="Album"
-                    android:layout_height="wrap_content" />
+                    android:padding="8dp"
+                    android:textColor="#fff" />
+
                 <EditText
-                    android:background="@drawable/buttonstyle"
-                    android:layout_margin="8dp"
                     android:id="@+id/edtYear"
-                    android:padding="8dp"
-                    android:textColor="#fff"
-                    android:hint="Year"
-                    android:fontFamily="serif"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-                <EditText
-                    android:background="@drawable/buttonstyle"
+                    android:layout_height="wrap_content"
                     android:layout_margin="8dp"
+                    android:background="@android:color/holo_blue_light"
                     android:fontFamily="serif"
-                    android:id="@+id/edtStyle"
+                    android:hint="Year"
                     android:padding="8dp"
-                    android:textColor="#fff"
-                    android:hint="Style/Genre"
+                    android:textColor="#fff" />
+
+                <EditText
+                    android:id="@+id/edtStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@android:color/holo_blue_light"
+                    android:fontFamily="serif"
+                    android:hint="Style/Genre"
+                    android:padding="8dp"
+                    android:textColor="#fff" />
 
                 <Button
                     android:id="@+id/BtnSave"

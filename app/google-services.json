@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "418423423721",
+    "firebase_url": "https://musictable-b0157.firebaseio.com",
+    "project_id": "musictable-b0157",
+    "storage_bucket": "musictable-b0157.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418423423721:android:c2847c8ab0989c3577e678",
+        "android_client_info": {
+          "package_name": "com.example.alspicks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "418423423721-r1kv1d5mblink0e1klbqi6302tjavnsu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.alspicks",
+            "certificate_hash": "380ffb2185a437e0a92d206587eeb4d782dfede0"
+          }
+        },
+        {
+          "client_id": "418423423721-9q9966dhi1in4qj6c0rr72coaf6cn38h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0RyPCcLO29vq2K0taL7WWgn66HIlysrQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "418423423721-9q9966dhi1in4qj6c0rr72coaf6cn38h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
