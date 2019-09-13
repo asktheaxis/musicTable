@@ -3,3 +3,12 @@
 So far, Firebase seems like a good candidate. 
 Amazon Web Services would also be a good option, but given both are free for now I am assuming Firebase
 will be easier to integrate with Google stuff. 
+
+
+
+9/12/2019 
+I got the app to talk to Firebase and merged the pull request to give the production branch that baseline.
+The commits from today rework how to add an album to the database, as well as clearing out the old HTTP server and pusher code.
+I also deleted the other 2 activity.java files for records and moved everything to MainActivity for now. 
+
+The plan is to get base functionality, and then break methods out and create new activities as needed.

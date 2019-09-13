@@ -1,14 +1,20 @@
 package com.example.alspicks;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.loopj.android.http.*;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+/*import com.loopj.android.http.*;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -20,16 +26,19 @@ import com.pusher.client.channel.PusherEvent;
 import com.pusher.client.channel.SubscriptionEventListener;
 
 import org.json.JSONArray;
-
+*/
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText edtArtist, edtAlbum, edtYear, edtStyle;
     private Button btnSave;
-    private static final String RECORDS_ENDPOINT = "http://localhost:3003/my-channel";
-    private RecordsAdapter recordAdapter;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,39 +47,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-            edtArtist = (EditText)findViewById(R.id.edtArtist);
+        edtArtist = (EditText)findViewById(R.id.edtArtist);
             edtAlbum = (EditText)findViewById(R.id.edtAlbum);
             edtYear = (EditText)findViewById(R.id.edtYear);
             edtStyle = (EditText)findViewById(R.id.edtStyle);
 
         btnSave = (Button)findViewById(R.id.BtnSave);
-
         btnSave.setOnClickListener(this);
 
-        recordAdapter = new RecordsAdapter(this, new ArrayList<Record>());
+
         final ListView recordsView = (ListView)findViewById(R.id.records_view);
-        recordsView.setAdapter(recordAdapter);
 
 
-        PusherOptions options = new PusherOptions();
-        options.setCluster("us2");
-        Pusher pusher = new Pusher("39233d6b9a974060a27d", options);
-        Channel channel = pusher.subscribe("my-channel");
-        channel.bind("my-event", new SubscriptionEventListener() {
-            @Override
-            public void onEvent(final PusherEvent event) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Gson gson = new Gson();
-                        Record record = gson.fromJson(event.getData(), Record.class);
-                        recordAdapter.add(record);
-                        recordsView.setSelection(recordAdapter.getCount() - 1);
-                    }
-                });
-            }
-        });
-        pusher.connect();
     }
 
     @Override
@@ -80,7 +68,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void addAlbum() {
 
+
+
         String albumArtist = edtArtist.getText().toString();
+
         String albumName = edtAlbum.getText().toString();
         String albumYear = edtYear.getText().toString();
         String albumStyle = edtStyle.getText().toString();
@@ -90,44 +81,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        RequestParams params = new RequestParams();
+        // Create a new album with Artist, Album, Year, and Genre
+        Map<String, Object> album = new HashMap<>();
+        album.put("Artist", albumArtist);
+        album.put("Album", albumName);
+        album.put("Year", albumYear);
+        album.put("Genre", albumStyle);
 
-        // set our JSON object
-        params.put("artist", albumArtist);
-        params.put("album", albumName);
-        params.put("year", albumYear);
-        params.put("style", albumStyle);
-
-        // create our HTTP client
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.post(RECORDS_ENDPOINT, params, new JsonHttpResponseHandler(){
-
-            @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
-                runOnUiThread(new Runnable() {
+        // Add a new document with a generated ID
+        db.collection("albums")
+                .add(album)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void run() {
-                        edtAlbum.setText("");
-                        edtArtist.setText("");
-                        edtYear.setText("");
-                        edtStyle.setText("");
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+
                     }
                 });
-            }
-
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                Toast.makeText(
-                        getApplicationContext(),
-                        "Something went wrong",
-                        Toast.LENGTH_LONG
-                ).show();
-            }
-        });
 
     }
+
 
 
 }
