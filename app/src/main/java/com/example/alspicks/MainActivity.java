@@ -1,4 +1,4 @@
-package com.example.alspicks; //FIXME
+package com.example.alspicks;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -6,72 +6,63 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-//import android.support.annotation.Nullable;
-
-/*import com.loopj.android.http.*;
-import com.google.gson.Gson;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.pusher.client.Pusher;
-import com.pusher.client.PusherOptions;
-import com.pusher.client.channel.Channel;
-import com.pusher.client.channel.PusherEvent;
-import com.pusher.client.channel.SubscriptionEventListener;
-
-import org.json.JSONArray;
-*/
-
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText edtArtist, edtAlbum, edtYear, edtStyle;
-    private TextView recordArtist, recordAlbum, recordYear, recordStyle;
-    private Button btnSave;
-    private ArrayList<String> albumCollection = new ArrayList<String>();
-    //ArrayAdapter<String> recordAdapter = new ArrayAdapter<String>(this, android.R.layout.records_view,);
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private static final String TAG = "MainActivity";
+    private ListView albumsListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        edtArtist = findViewById(R.id.edtArtist);
+        edtAlbum = findViewById(R.id.edtAlbum);
+        edtYear = findViewById(R.id.edtYear);
+        edtStyle = findViewById(R.id.edtStyle);
 
-
-        edtArtist = (EditText)findViewById(R.id.edtArtist);
-        edtAlbum = (EditText)findViewById(R.id.edtAlbum);
-        edtYear = (EditText)findViewById(R.id.edtYear);
-        edtStyle = (EditText)findViewById(R.id.edtStyle);
-
-        recordAlbum = (TextView)findViewById(R.id.record_artist);
-        recordArtist = (TextView)findViewById(R.id.record_artist);
-        recordYear = (TextView)findViewById(R.id.record_year);
-        recordStyle = (TextView)findViewById(R.id.record_style);
-
-        btnSave = (Button)findViewById(R.id.BtnSave);
+        Button btnSave = findViewById(R.id.BtnSave);
         btnSave.setOnClickListener(this);
 
+        albumsListView = findViewById(R.id.records_view);
 
-        final ListView recordsView = (ListView)findViewById(R.id.records_view);
+        db.collection("albums").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                ArrayList<Album> albumArrayList = new ArrayList<Album>();
+                if(task.isSuccessful()){
+                    for(QueryDocumentSnapshot document : task.getResult()){
+                        Album albums = document.toObject(Album.class);
+                        albumArrayList.add(albums);
+                    }
+                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(MainActivity.this, albumArrayList);
+                    albumArrayAdapter.notifyDataSetChanged();
+                    albumsListView.setAdapter(albumArrayAdapter);
+                }
 
+            }
+        });
 
     }
 
@@ -81,8 +72,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void addAlbum() {
-
-
 
         final String albumArtist = edtArtist.getText().toString();
 
@@ -96,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // Create a new album with Artist, Album, Year, and Genre
-        final CollectionReference albums = db.collection("albums");
+        //final CollectionReference albums = db.collection("albums"); //FIXME
 
         final Map<String, Object> album = new HashMap<>();
         album.put("Artist", albumArtist);
@@ -111,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        //albums.document(albumName).set(album);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -121,25 +109,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
-
-        /*DocumentReference docRef = db.collection("albums").document(albumName);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        //POPULATE LISTVIEW WITH ARRAYADAPTER
-
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });*/
 
     }
 

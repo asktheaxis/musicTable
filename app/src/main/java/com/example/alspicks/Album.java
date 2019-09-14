@@ -1,10 +1,13 @@
 package com.example.alspicks;
 
 public class Album {
-    private String albumName;
-    private String albumArtist;
-    private String albumYear;
-    private String albumStyle;
+    //Firebase requires these to be public
+    public String albumName;
+    public String albumArtist;
+    public String albumYear;
+    public String albumStyle;
+
+    public Album(){}
 
     public Album(String name, String artist, String year, String style){
         this.albumName = name;
@@ -13,19 +16,19 @@ public class Album {
         this.albumStyle = style;
     }
 
-    public String getName(){
+    String getAlbumName(){
         return albumName;
     }
 
-    public String getArtist(){
+    String getAlbumArtist(){
         return albumArtist;
     }
 
-    public String getAlbumYear(){
+    String getAlbumYear(){
         return albumYear;
     }
 
-    public String getAlbumStyle(){
+    String getAlbumStyle(){
         return albumStyle;
     }
 

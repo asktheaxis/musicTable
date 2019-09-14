@@ -110,7 +110,7 @@
                     android:padding="10dp">
 
                     <TextView
-                        android:id="@+id/record_artist"
+                        android:id="@+id/header_artist"
                         android:fontFamily="serif"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
@@ -118,7 +118,7 @@
                         android:textColor="#000"
                         android:text="Artist"/>
                     <TextView
-                        android:id="@+id/record_album"
+                        android:id="@+id/header_album"
                         android:textColor="#000"
                         android:fontFamily="serif"
                         android:layout_height="wrap_content"
@@ -127,15 +127,15 @@
                         android:text="Album"/>
                     <TextView
                         android:textColor="#000"
-                        android:id="@+id/record_year"
+                        android:id="@+id/header_year"
                         android:fontFamily="serif"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
-                        android:text="Year"/>
+                        android:text="/Year"/>
                     <TextView
                         android:textColor="#000"
-                        android:id="@+id/record_style"
+                        android:id="@+id/header_style"
                         android:fontFamily="serif"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
@@ -154,7 +154,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
                 android:layout_marginTop="16dp">
-
             </ListView>
         </LinearLayout>
     </ScrollView>
