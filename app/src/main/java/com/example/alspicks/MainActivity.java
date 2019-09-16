@@ -1,7 +1,9 @@
 package com.example.alspicks;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,23 +34,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
     private ListView albumsListView;
 
+    private float x1, x2, y1, y2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        edtArtist = findViewById(R.id.edtArtist);
+      /*  edtArtist = findViewById(R.id.edtArtist);
         edtAlbum = findViewById(R.id.edtAlbum);
         edtYear = findViewById(R.id.edtYear);
         edtStyle = findViewById(R.id.edtStyle);
 
+*/
+
         Button btnSave = findViewById(R.id.BtnSave);
+
         btnSave.setOnClickListener(this);
 
-        albumsListView = findViewById(R.id.records_view);
+        Button btnTunes = findViewById(R.id.BtnTunes);
+
+        btnTunes.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            openNewTunes();
+                                        }
+                                    });
+
+
+
+     /*   albumsListView = findViewById(R.id.records_view);
 
         db.collection("albums").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
+
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 ArrayList<Album> albumArrayList = new ArrayList<Album>();
                 if(task.isSuccessful()){
@@ -62,14 +80,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
             }
-        });
+        }); */
 
     }
+
+    public void openNewTunes() {
+        Intent intent = new Intent(this, NewTunes.class);
+        startActivity(intent);
+    }
+
 
     @Override
     public void onClick(View v) {
         addAlbum();
     }
+
+    public boolean onTouch(View v, MotionEvent e) {
+       return onTouchEvent(e);
+    }
+    public boolean onTouchEvent(MotionEvent touchEvent) {
+        switch (touchEvent.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                x1 = touchEvent.getX();
+                y1 = touchEvent.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = touchEvent.getX();
+                y2 = touchEvent.getY();
+                if (x1 < x2) {
+                    Intent i = new Intent(this, NewTunes.class);
+                    startActivity(i);
+                }
+                break;
+
+        }
+        return false;
+    }
+
 
     private void addAlbum() {
 
@@ -109,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
 
     }
+
+
 
 
 
