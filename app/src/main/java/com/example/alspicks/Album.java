@@ -2,34 +2,34 @@ package com.example.alspicks;
 
 public class Album {
     //Firebase requires these to be public
-    public String albumName;
-    public String albumArtist;
-    public String albumYear;
-    public String albumStyle;
+    public String name;
+    public String artist;
+    public String year;
+    public String style;
 
     public Album(){}
 
     public Album(String name, String artist, String year, String style){
-        this.albumName = name;
-        this.albumArtist = artist;
-        this.albumYear = year;
-        this.albumStyle = style;
+        this.name = name;
+        this.artist = artist;
+        this.year = year;
+        this.style = style;
     }
 
-    String getAlbumName(){
-        return albumName;
+    String getName(){
+        return name;
     }
 
-    String getAlbumArtist(){
-        return albumArtist;
+    String getArtist(){
+        return artist;
     }
 
-    String getAlbumYear(){
-        return albumYear;
+    String getYear(){
+        return year;
     }
 
-    String getAlbumStyle(){
-        return albumStyle;
+    String getStyle(){
+        return style;
     }
 
 }

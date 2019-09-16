@@ -85,13 +85,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // Create a new album with Artist, Album, Year, and Genre
-        //final CollectionReference albums = db.collection("albums"); //FIXME
-
         final Map<String, Object> album = new HashMap<>();
-        album.put("Artist", albumArtist);
-        album.put("Album", albumName);
-        album.put("Year", albumYear);
-        album.put("Genre", albumStyle);
+        album.put("artist", albumArtist);
+        album.put("name", albumName);
+        album.put("year", albumYear);
+        album.put("style", albumStyle);
 
         // Add a new document with a generated ID
         db.collection("albums")

@@ -26,10 +26,10 @@ public class AlbumArrayAdapter extends ArrayAdapter<Album> {
         TextView year = convertView.findViewById(R.id.record_year);
         TextView style = convertView.findViewById(R.id.record_style);
 
-        name.setText(album.getAlbumName());
-        artist.setText(album.getAlbumArtist());
-        year.setText(album.getAlbumYear());
-        style.setText(album.getAlbumStyle());
+        name.setText(album.getName());
+        artist.setText(album.getArtist());
+        year.setText(album.getYear());
+        style.setText(album.getStyle());
 
         return convertView;
     }
