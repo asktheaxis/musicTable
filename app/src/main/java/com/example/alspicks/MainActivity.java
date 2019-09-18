@@ -26,7 +26,6 @@ import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    //comment
     private EditText edtArtist, edtAlbum, edtYear, edtStyle;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
