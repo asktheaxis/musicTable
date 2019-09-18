@@ -87,6 +87,15 @@
                     android:onClick="AddEmployee"
                     android:text="Add Album"/>
 
+                <Button
+                    android:id="@+id/BtnTunes"
+                    android:layout_gravity="center"
+                    android:fontFamily="serif"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="newTunes"
+                    android:text="New Tunes"/>
+
             </LinearLayout>
 
             <TextView
