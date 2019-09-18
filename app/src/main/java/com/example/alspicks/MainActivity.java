@@ -1,5 +1,6 @@
 package com.example.alspicks;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +45,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnSave = findViewById(R.id.BtnSave);
         btnSave.setOnClickListener(this);
+        Button btnTunes = findViewById(R.id.BtnTunes);
+
+        btnTunes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openNewTunes();
+            }
+        });
 
         albumsListView = findViewById(R.id.records_view);
 
@@ -63,7 +72,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+    }
 
+    public void openNewTunes() {
+        Intent intent = new Intent(this, NewTunes.class);
+        startActivity(intent);
     }
 
     @Override
