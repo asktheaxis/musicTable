@@ -26,9 +26,7 @@ import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    int x;
-    double y;
-    boolean a;
+
     private EditText edtArtist, edtAlbum, edtYear, edtStyle;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
