@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class AlbumArrayAdapter extends ArrayAdapter<Album> {
 
-    public AlbumArrayAdapter(Context context, ArrayList<Album> albums) {
+    AlbumArrayAdapter(Context context, ArrayList<Album> albums) {
         super(context, 0, albums);
     }
 

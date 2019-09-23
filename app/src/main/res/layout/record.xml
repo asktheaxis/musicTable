@@ -8,26 +8,30 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:textColor="#000"/>
+        android:textColor="#000"
+        android:text="Artist"/>
     <TextView
         android:id="@+id/record_album"
         android:textColor="#000"
         android:fontFamily="serif"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:text="Album"/>
     <TextView
         android:textColor="#000"
         android:id="@+id/record_year"
         android:fontFamily="serif"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:text="Year"/>
     <TextView
         android:textColor="#000"
         android:id="@+id/record_style"
         android:fontFamily="serif"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:text="Style"/>
 </LinearLayout>
