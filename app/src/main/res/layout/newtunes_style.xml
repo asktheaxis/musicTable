@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/layoutstyle"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:fontFamily="serif"
+                android:text="New Tunes"
+                android:gravity="center"/>
+
+            <TableLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/header_artist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:text="Artist"
+                        android:textColor="#000" />
+
+                    <TextView
+                        android:id="@+id/header_album"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:text="Album"
+                        android:textColor="#000" />
+
+                    <TextView
+                        android:id="@+id/header_year"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:text="Year"
+                        android:textColor="#000" />
+
+                    <TextView
+                        android:id="@+id/header_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:text="Style"
+                        android:textColor="#000" />
+
+                </TableRow>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dip"
+                    android:background="#ff0000" />
+            </TableLayout>
+
+            <ListView
+                android:id="@+id/records_view"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_marginTop="16dp"
+
+                android:layout_marginLeft="10dp">
+
+            </ListView>
+
+
+            <Button
+                android:id="@+id/BtnMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="serif"
+                android:onClick="openMain"
+                android:text="Back" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

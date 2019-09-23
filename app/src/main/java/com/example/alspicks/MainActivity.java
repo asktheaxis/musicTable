@@ -1,76 +1,179 @@
 package com.example.alspicks;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.loopj.android.http.*;
-import com.google.gson.Gson;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.pusher.client.Pusher;
-import com.pusher.client.PusherOptions;
-import com.pusher.client.channel.Channel;
-import com.pusher.client.channel.PusherEvent;
-import com.pusher.client.channel.SubscriptionEventListener;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONArray;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText edtArtist, edtAlbum, edtYear, edtStyle;
-    private Button btnSave;
-    private static final String RECORDS_ENDPOINT = "http://localhost:3003/my-channel";
-    private RecordsAdapter recordAdapter;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private static final String TAG = "MainActivity";
+    private ListView albumsListView;
+
+    private GoogleSignInClient mGoogleSignInClient;
+    private static final int RC_SIGN_IN = 9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
 
+        edtArtist = findViewById(R.id.edtArtist);
+        edtAlbum = findViewById(R.id.edtAlbum);
+        edtYear = findViewById(R.id.edtYear);
+        edtStyle = findViewById(R.id.edtStyle);
 
-            edtArtist = (EditText)findViewById(R.id.edtArtist);
-            edtAlbum = (EditText)findViewById(R.id.edtAlbum);
-            edtYear = (EditText)findViewById(R.id.edtYear);
-            edtStyle = (EditText)findViewById(R.id.edtStyle);
-
-        btnSave = (Button)findViewById(R.id.BtnSave);
-
+        Button btnSave = findViewById(R.id.BtnSave);
         btnSave.setOnClickListener(this);
-
-        recordAdapter = new RecordsAdapter(this, new ArrayList<Record>());
-        final ListView recordsView = (ListView)findViewById(R.id.records_view);
-        recordsView.setAdapter(recordAdapter);
+        Button btnTunes = findViewById(R.id.BtnTunes);
+        SignInButton btnGoogleSignIn = findViewById(R.id.sign_in_button);
 
 
-        PusherOptions options = new PusherOptions();
-        options.setCluster("us2");
-        Pusher pusher = new Pusher("39233d6b9a974060a27d", options);
-        Channel channel = pusher.subscribe("my-channel");
-        channel.bind("my-event", new SubscriptionEventListener() {
+        btnGoogleSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onEvent(final PusherEvent event) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Gson gson = new Gson();
-                        Record record = gson.fromJson(event.getData(), Record.class);
-                        recordAdapter.add(record);
-                        recordsView.setSelection(recordAdapter.getCount() - 1);
-                    }
-                });
+            public void onClick(View view) {
+                createSignInIntent();
             }
         });
-        pusher.connect();
+
+        btnTunes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openNewTunes();
+            }
+        }
+
+
+        );
+
+        albumsListView = findViewById(R.id.records_view);
+
+        db.collection("albums").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                ArrayList<Album> albumArrayList = new ArrayList<Album>();
+                if(task.isSuccessful()){
+                    for(QueryDocumentSnapshot document : task.getResult()){
+                        Album albums = document.toObject(Album.class);
+                        albumArrayList.add(albums);
+                    }
+                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(MainActivity.this, albumArrayList);
+                    albumArrayAdapter.notifyDataSetChanged();
+                    albumsListView.setAdapter(albumArrayAdapter);
+                }
+
+            }
+        });
+    }
+
+    public void createSignInIntent() {
+        // [START auth_fui_create_intent]
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                //new AuthUI.IdpConfig.PhoneBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build());
+
+        // Create and launch sign-in intent
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .build(),
+                RC_SIGN_IN);
+        // [END auth_fui_create_intent]
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == RESULT_OK) {
+                // Successfully signed in
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                // ...
+            } else {
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+                // ...
+            }
+        }
+    }
+    // [END auth_fui_result]
+
+    public void signOut() {
+        // [START auth_fui_signout]
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
+        // [END auth_fui_signout]
+    }
+
+    public void delete() {
+        // [START auth_fui_delete]
+        AuthUI.getInstance()
+                .delete(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
+        // [END auth_fui_delete]
+    }
+
+
+    public void openNewTunes() {
+        Intent intent = new Intent(this, NewTunes.class);
+        startActivity(intent);
     }
 
     @Override
@@ -80,54 +183,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void addAlbum() {
 
-        String albumArtist = edtArtist.getText().toString();
-        String albumName = edtAlbum.getText().toString();
-        String albumYear = edtYear.getText().toString();
-        String albumStyle = edtStyle.getText().toString();
+        final String albumArtist = edtArtist.getText().toString();
+
+        final String albumName = edtAlbum.getText().toString();
+        final String albumYear = edtYear.getText().toString();
+        final String albumStyle = edtStyle.getText().toString();
 
         // return if input fields are empty
         if (albumArtist.equals("") && albumName.equals("") && albumYear.equals("") && albumStyle.equals("")){
             return;
         }
 
-        RequestParams params = new RequestParams();
+        // Create a new album with Artist, Album, Year, and Genre
+        final Map<String, Object> album = new HashMap<>();
+        album.put("artist", albumArtist);
+        album.put("name", albumName);
+        album.put("year", albumYear);
+        album.put("style", albumStyle);
 
-        // set our JSON object
-        params.put("artist", albumArtist);
-        params.put("album", albumName);
-        params.put("year", albumYear);
-        params.put("style", albumStyle);
-
-        // create our HTTP client
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.post(RECORDS_ENDPOINT, params, new JsonHttpResponseHandler(){
-
-            @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
-                runOnUiThread(new Runnable() {
+        // Add a new document with a generated ID
+        db.collection("albums")
+                .add(album)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void run() {
-                        edtAlbum.setText("");
-                        edtArtist.setText("");
-                        edtYear.setText("");
-                        edtStyle.setText("");
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+
                     }
                 });
-            }
-
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                Toast.makeText(
-                        getApplicationContext(),
-                        "Something went wrong",
-                        Toast.LENGTH_LONG
-                ).show();
-            }
-        });
 
     }
+
 
 
 }
