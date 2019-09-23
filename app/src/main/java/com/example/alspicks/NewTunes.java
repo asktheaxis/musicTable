@@ -17,6 +17,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class NewTunes extends AppCompatActivity {
     private ListView albumsListView;
@@ -50,7 +52,8 @@ public class NewTunes extends AppCompatActivity {
                         Album albums = document.toObject(Album.class);
                         albumArrayList.add(albums);
                     }
-                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(NewTunes.this, albumArrayList);
+                    ArrayList<Album> artistSort = defaultSort(albumArrayList);
+                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(NewTunes.this, artistSort);
                     albumArrayAdapter.notifyDataSetChanged();
                     albumsListView.setAdapter(albumArrayAdapter);
                 }
@@ -64,5 +67,9 @@ public class NewTunes extends AppCompatActivity {
     public void openMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public ArrayList<Album> defaultSort(ArrayList<Album> albumArrayList){
+        return (ArrayList<Album>) albumArrayList.stream().sorted(Comparator.comparing(Album::getArtist)).collect(Collectors.toList());
     }
 }
