@@ -14,11 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,10 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -86,24 +81,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         );
 
-        albumsListView = findViewById(R.id.records_view);
-
-        db.collection("albums").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                ArrayList<Album> albumArrayList = new ArrayList<Album>();
-                if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot document : task.getResult()){
-                        Album albums = document.toObject(Album.class);
-                        albumArrayList.add(albums);
-                    }
-                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(MainActivity.this, albumArrayList);
-                    albumArrayAdapter.notifyDataSetChanged();
-                    albumsListView.setAdapter(albumArrayAdapter);
-                }
-
-            }
-        });
     }
 
     public void createSignInIntent() {
