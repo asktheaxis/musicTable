@@ -15,7 +15,7 @@ public class Album implements Collection<Album> {
 
     public Album(){}
 
-    public Album(String name, String artist, String year, String style){
+    public Album(String artist, String name, String year, String style){
         this.name = name;
         this.artist = artist;
         this.year = year;
