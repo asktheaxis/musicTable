@@ -62,7 +62,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSave.setOnClickListener(this);
         Button btnTunes = findViewById(R.id.BtnTunes);
         SignInButton btnGoogleSignIn = findViewById(R.id.sign_in_button);
+        Button btnSignOut = findViewById(R.id.btnSignOut);
 
+        btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signOut();
+            }
+        });
 
         btnGoogleSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
