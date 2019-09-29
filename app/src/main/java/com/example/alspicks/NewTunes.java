@@ -69,7 +69,16 @@ public class NewTunes extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //Our default sorts by Artist Name
     public ArrayList<Album> defaultSort(ArrayList<Album> albumArrayList){
         return (ArrayList<Album>) albumArrayList.stream().sorted(Comparator.comparing(Album::getArtist)).collect(Collectors.toList());
+    }
+
+    public ArrayList<Album> yearSort(ArrayList<Album> albumArrayList) {
+        return (ArrayList<Album>) albumArrayList.stream().sorted(Comparator.comparing(Album::getYear)).collect(Collectors.toList());
+    }
+
+    public ArrayList<Album> styleSort(ArrayList<Album> albumArrayList) {
+        return (ArrayList<Album>) albumArrayList.stream().sorted(Comparator.comparing(Album::getStyle)).collect(Collectors.toList());
     }
 }
