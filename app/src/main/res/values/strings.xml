@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Siren</string>
+
+    <string name="settings_text_select_theme">Select Theme:</string>
+    <string name="settings_text_add_album">Add Album</string>
+    <string name="settings_text_new_tunes">New Tunes</string>
+
+    <string-array name="theme_array">
+        <item>Material-Light</item>
+        <item>Dark-Theme</item>
+    </string-array>
+
 </resources>

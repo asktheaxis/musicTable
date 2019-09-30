@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="Theme.light" parent = "Theme.AppCompat.Light">
+        <item name="pageBackground">@style/colorPrimary_light</item>
+        <item name="accentLine">@style/colorAccent_light</item>
+        <item name="textBoxes">@style/textField_light</item>
+        <item name="textRegular">@style/text_light</item>
+        <item name="spinner">@style/spinner</item>
+        <item name="button">@style/button_wh</item>
+    </style>
+
+    <style name="Theme.darkTheme" parent="Theme.AppCompat.Light">
+        <item name="pageBackground">@style/colorPrimary_dark</item>
+        <item name="accentLine">@style/colorAccent_dark</item>
+        <item name="textBoxes">@style/textField_dark</item>
+        <item name="textRegular">@style/text_dark</item>
+        <item name="spinner">@style/spinner</item>
+        <item name="button">@style/button_wh</item>
+    </style>
+
+</resources>
