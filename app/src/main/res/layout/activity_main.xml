@@ -60,8 +60,7 @@
                     android:layout_margin="8dp"
                     android:fontFamily="serif"
                     android:hint="Album"
-                    android:padding="8dp"
-                    android:textColor="?textRegular"/>
+                    android:padding="8dp" />
 
                 <EditText
                     android:id="@+id/edtYear"
@@ -71,8 +70,7 @@
                     android:layout_margin="8dp"
                     android:fontFamily="serif"
                     android:hint="Year"
-                    android:padding="8dp"
-                    android:textColor="?textRegular" />
+                    android:padding="8dp" />
 
                 <EditText
                     android:id="@+id/edtStyle"
@@ -82,8 +80,7 @@
                     android:layout_margin="8dp"
                     android:fontFamily="serif"
                     android:hint="Style/Genre"
-                    android:padding="8dp"
-                    android:textColor="?textRegular" />
+                    android:padding="8dp"/>
 
                 <Button
                     android:id="@+id/BtnSave"
