@@ -3,4 +3,15 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="button">#D81B60</color>
+    <color name="colorPrimary_dark">#D81B60</color>
+    <color name="colorAccent_dark">#D81B60</color>
+    <color name="textField_dark">#D81B60</color>
+    <color name="button_wh">#D81B60</color>
+    <color name="spinner">#D81B60</color>
+    <color name="text_light">#D81B60</color>
+    <color name="textField_light">#D81B60</color>
+    <color name="colorAccent_light">#D81B60</color>
+    <color name="colorPrimary_light">#D81B60</color>
+    <color name="text_dark">#D81B60</color>
 </resources>
