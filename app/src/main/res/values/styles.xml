@@ -8,7 +8,7 @@
 
     //light theme
     <style name="colorPrimary_light">
-        <item name="android:background">#ffffff</item>
+        <item name="android:background">@drawable/background_light</item>
     </style>
 
     <style name="colorAccent_light">
@@ -50,7 +50,7 @@
 
     //dark theme
     <style name="colorPrimary_dark">
-        <item name="android:background">#dc494949</item>
+        <item name="android:background">@drawable/background_dark</item>
     </style>
 
     <style name="colorAccent_dark">
@@ -59,6 +59,7 @@
 
     <style name="textField_dark">
         <item name="android:background">#89b5ad</item>
+        <item name="android:textColor">#fff</item>
     </style>
 
     <style name="text_dark">
