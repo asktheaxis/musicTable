@@ -61,6 +61,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
     //----copied from MainActivity----//
+     @SuppressLint("RestrictedApi")
+    Context context = getApplicationContext();
+
+    CharSequence text = "Album added";
+    int duration = Toast.LENGTH_SHORT;
+
+    Toast albumAdded = Toast.makeText(context, text, duration);
 
 
     @Override
@@ -270,6 +277,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                     }
                 });
+        albumAdded.show();
 
     }
 
