@@ -1,7 +1,9 @@
 package com.example.alspicks.ui.home;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -47,6 +50,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private HomeViewModel homeViewModel;
@@ -61,6 +66,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
     //----copied from MainActivity----//
+     @SuppressLint("RestrictedApi")
+    Context context = getApplicationContext();
+
+    CharSequence text = "Album added";
+    int duration = Toast.LENGTH_SHORT;
+
+    Toast albumAdded = Toast.makeText(context, text, duration);
 
 
     @Override
@@ -270,6 +282,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                     }
                 });
+        albumAdded.show();
 
     }
 
