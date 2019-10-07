@@ -125,7 +125,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
             case R.id.BtnSave:
                 addAlbum();
-                break;
+                edtAlbum.getText().clear();
+                edtArtist.getText().clear();
+                edtStyle.getText().clear();
+                edtYear.getText().clear();
+            break;
 
             case R.id.BtnTunes:
                 openNewTunes();
