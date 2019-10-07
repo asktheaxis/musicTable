@@ -5,25 +5,23 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.alspicks.NewTunes;
+import com.example.alspicks.R;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -39,11 +37,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import com.example.alspicks.R;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -94,13 +87,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-
-        //vvv-copied from MainActivity-vvv//
         edtArtist = root.findViewById(R.id.edtArtist);
         edtAlbum = root.findViewById(R.id.edtAlbum);
         edtYear = root.findViewById(R.id.edtYear);
         edtStyle = root.findViewById(R.id.edtStyle);
-
 
         //all our buttons should use the same on click, each has it's own case below
         Button btnSave = root.findViewById(R.id.BtnSave);
@@ -249,7 +239,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private void addAlbum() {
 
         final String albumArtist = edtArtist.getText().toString();
-
         final String albumName = edtAlbum.getText().toString();
         final String albumYear = edtYear.getText().toString();
         final String albumStyle = edtStyle.getText().toString();

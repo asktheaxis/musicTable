@@ -4,10 +4,13 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-
     <string name="settings_text_select_theme">Select Theme:</string>
     <string name="settings_text_add_album">Add Album</string>
     <string name="settings_text_new_tunes">New Tunes</string>
+    <string name="Artist">Artist</string>
+    <string name="Album">Album</string>
+    <string name="Year">Year</string>
+    <string name="Style">Style</string>
 
     <string-array name="theme_array">
         <item>Material-Light</item>

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:textColor="#000"
-        android:text="Artist"/>
+        android:text="@string/Artist"/>
     <TextView
         android:id="@+id/record_album"
         android:textColor="#000"
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:text="Album"/>
+        android:text="@string/Album"/>
     <TextView
         android:textColor="#000"
         android:id="@+id/record_year"
@@ -25,7 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:text="Year"/>
+        android:gravity="center"
+        android:text="@string/Year"/>
     <TextView
         android:textColor="#000"
         android:id="@+id/record_style"
@@ -33,5 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:text="Style"/>
+        android:gravity="center"
+        android:text="@string/Style"/>
 </LinearLayout>
