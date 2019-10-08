@@ -2,124 +2,118 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
+    style="?pageBackground"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    style="?pageBackground">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+
+        android:id="@+id/textView"
+        style="?textRegular"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="?pageBackground"
-        android:orientation="vertical">
+        android:layout_marginTop="26dp"
+        android:fontFamily="serif"
+        android:text="Add a great album!"
+        android:textColor="#000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/edtArtist"
+        style="?textBoxes"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="10dp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginRight="17dp"
+        android:fontFamily="serif"
+        android:hint="Artist"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-        <TextView
+    <EditText
+        android:id="@+id/edtAlbum"
+        style="?textBoxes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginRight="17dp"
+        android:fontFamily="serif"
+        android:hint="Album"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtArtist" />
 
-            style="?textRegular"
-            android:layout_gravity="center"
-            android:layout_margin="16dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#000"
-            android:fontFamily="serif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add a great album!"/>
+    <EditText
+        android:id="@+id/edtYear"
+        style="?textBoxes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginRight="17dp"
+        android:fontFamily="serif"
+        android:hint="Year"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtAlbum" />
 
+    <EditText
+        android:id="@+id/edtStyle"
+        style="?textBoxes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="17dp"
+        android:fontFamily="serif"
+        android:hint="Style/Genre"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtYear" />
 
+    <Button
+        android:id="@+id/BtnSave"
+        style="?button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif"
+        android:onClick="AddEmployee"
+        android:text="Add Album"
+        app:layout_constraintEnd_toStartOf="@+id/BtnTunes"
+        app:layout_constraintHorizontal_bias="0.094"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtStyle" />
 
-        <EditText
-            android:id="@+id/edtArtist"
-            style="?textBoxes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:fontFamily="serif"
-            android:hint="Artist"
-            android:padding="8dp" />
-
-        <EditText
-            android:id="@+id/edtAlbum"
-            style="?textBoxes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:fontFamily="serif"
-            android:hint="Album"
-            android:padding="8dp" />
-
-        <EditText
-            android:id="@+id/edtYear"
-            style="?textBoxes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:fontFamily="serif"
-            android:hint="Year"
-            android:padding="8dp" />
-
-        <EditText
-            android:id="@+id/edtStyle"
-            style="?textBoxes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:fontFamily="serif"
-            android:hint="Style/Genre"
-            android:padding="8dp"/>
-
-        <Button
-            android:id="@+id/BtnSave"
-            style="?button"
-            android:layout_gravity="center"
-            android:fontFamily="serif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="AddEmployee"
-            android:text="Add Album"/>
-
-        <Button
-            android:id="@+id/BtnTunes"
-            style="?button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="serif"
-            android:onClick="newTunes"
-            android:text="New Tunes"/>
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-        <Button
-            android:id="@+id/btnSignOut"
-            style="?button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="signOut"
-            android:text="Sign Out"
-            android:layout_gravity="center" />
-
-    </LinearLayout>
-    </LinearLayout>
-    </ScrollView>
-
-
+    <Button
+        android:id="@+id/BtnTunes"
+        style="?button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="serif"
+        android:onClick="newTunes"
+        android:text="New Tunes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtStyle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
