@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
+        android:paddingRight="2dp"
         android:textColor="#000"
         android:text="@string/Artist"/>
     <TextView
@@ -17,6 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
+        android:paddingLeft="15dp"
+        android:minWidth="20dp"
         android:text="@string/Album"/>
     <TextView
         android:textColor="#000"
@@ -26,6 +29,8 @@
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:gravity="center"
+        android:paddingLeft="10dp"
+        android:maxWidth="10dp"
         android:text="@string/Year"/>
     <TextView
         android:textColor="#000"

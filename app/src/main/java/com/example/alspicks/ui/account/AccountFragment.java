@@ -1,8 +1,6 @@
-package com.example.alspicks.ui.home;
+package com.example.alspicks.ui.account;
 
-
-import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,50 +8,47 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.alspicks.NewTunes;
 import com.example.alspicks.R;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+public class AccountFragment extends Fragment implements View.OnClickListener {
 
-public class HomeFragment extends Fragment implements View.OnClickListener{
-
-    private HomeViewModel homeViewModel;
-
-    //----copied from MainActivity----//
-    private EditText edtArtist, edtAlbum, edtYear, edtStyle;
+    private AccountViewModel accountViewModel;
+    private GoogleSignInClient mGoogleSignInClient;
+    private static final int RC_SIGN_IN = 9001;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     private static final String TAG = "MainActivity";
-    private ListView albumsListView;
-
-    //private GoogleSignInClient mGoogleSignInClient;
-    //private static final int RC_SIGN_IN = 9001;
-    //----copied from MainActivity----//
-     @SuppressLint("RestrictedApi")
-    Context context = getApplicationContext();
-
-    CharSequence text = "Album added";
-    int duration = Toast.LENGTH_SHORT;
-
-    Toast albumAdded = Toast.makeText(context, text, duration);
 
 
-    /*@Override
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //----copied from MainActivity----//
@@ -64,56 +59,40 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         //----copied from MainActivity----//
 
 
-    }*/
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        accountViewModel =
+                ViewModelProviders.of(this).get(AccountViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_account, container, false);
+        final TextView textView = root.findViewById(R.id.text_account);
+        accountViewModel.getText().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                textView.setText(s);
+            }
+        });
 
-        edtArtist = root.findViewById(R.id.edtArtist);
-        edtAlbum = root.findViewById(R.id.edtAlbum);
-        edtYear = root.findViewById(R.id.edtYear);
-        edtStyle = root.findViewById(R.id.edtStyle);
-
-        //all our buttons should use the same on click, each has it's own case below
-        Button btnSave = root.findViewById(R.id.BtnSave);
-        btnSave.setOnClickListener(this);
-
-        Button btnTunes = root.findViewById(R.id.BtnTunes);
-        btnTunes.setOnClickListener(this);
-
-        /*SignInButton btnGoogleSignIn = root.findViewById(R.id.sign_in_button);
+        SignInButton btnGoogleSignIn = root.findViewById(R.id.sign_in_button);
         btnGoogleSignIn.setOnClickListener(this);
 
         Button btnSignOut = root.findViewById(R.id.btnSignOut);
-        btnSignOut.setOnClickListener(this);*/
-
-
-
-        //^^^-copied from MainActivity-^^^//
+        btnSignOut.setOnClickListener(this);
 
         return root;
     }
-
-
-    //vvv-copied from MainActivity-vvv//
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
 
-            case R.id.BtnSave:
-                addAlbum();
-                edtAlbum.getText().clear();
-                edtArtist.getText().clear();
-                edtStyle.getText().clear();
-                edtYear.getText().clear();
-            break;
+            case R.id.btnSignOut: //each button gets a case
+                signOut();
+                break;
 
-            case R.id.BtnTunes:
-                openNewTunes();
+            case R.id.sign_in_button:
+                createSignInIntent();
                 break;
 
             default:
@@ -121,8 +100,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-
-    /*public void createSignInIntent() {
+    public void createSignInIntent() {
         // [START auth_fui_create_intent]
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -138,9 +116,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         .build(),
                 RC_SIGN_IN);
         // [END auth_fui_create_intent]
-    }*/
+    }
 
-    /*@Override
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -207,53 +185,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     }
                 });
         // [END auth_fui_delete]
-    }*/
+    }
 
     //we can probably relocate new tunes to one of the open fragments instead of another activity
     public void openNewTunes() {
         Intent intent = new Intent(getActivity(), NewTunes.class);
         startActivity(intent);
     }
-
-
-
-    private void addAlbum() {
-
-        final String albumArtist = edtArtist.getText().toString();
-        final String albumName = edtAlbum.getText().toString();
-        final String albumYear = edtYear.getText().toString();
-        final String albumStyle = edtStyle.getText().toString();
-
-        // return if input fields are empty
-        if (albumArtist.equals("") && albumName.equals("") && albumYear.equals("") && albumStyle.equals("")){
-            return;
-        }
-
-        // Create a new album with Artist, Album, Year, and Genre
-        final Map<String, Object> album = new HashMap<>();
-        album.put("artist", albumArtist);
-        album.put("name", albumName);
-        album.put("year", albumYear);
-        album.put("style", albumStyle);
-
-        // Add a new document with a generated ID
-        db.collection("albums")
-                .add(album)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-
-                    }
-                });
-        albumAdded.show();
-
-    }
-
 }
