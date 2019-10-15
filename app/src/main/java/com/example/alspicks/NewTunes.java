@@ -24,6 +24,7 @@ public class NewTunes extends AppCompatActivity {
     private ListView albumsListView;
     private EditText edtArtist, edtAlbum, edtYear, edtStyle;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private SharedViewModel sharedViewModel;
 
 
     @Override
@@ -70,7 +71,7 @@ public class NewTunes extends AppCompatActivity {
     }
 
     //Our default sorts by Artist Name
-    public ArrayList<Album> defaultSort(ArrayList<Album> albumArrayList){
+    public static ArrayList<Album> defaultSort(ArrayList<Album> albumArrayList){
         return (ArrayList<Album>) albumArrayList.stream().sorted(Comparator.comparing(Album::getArtist)).collect(Collectors.toList());
     }
 

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.alspicks.NewTunes;
 import com.example.alspicks.R;
+import com.example.alspicks.SharedViewModel;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -33,6 +35,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,11 +45,13 @@ import java.util.Map;
 public class AccountFragment extends Fragment implements View.OnClickListener {
 
     private AccountViewModel accountViewModel;
+    private SharedViewModel sharedViewModel;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "MainActivity";
-
+    private String userName;
+    TextView userTextView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,12 +66,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        accountViewModel =
-                ViewModelProviders.of(this).get(AccountViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        accountViewModel = ViewModelProviders.of(this).get(AccountViewModel.class);
         View root = inflater.inflate(R.layout.fragment_account, container, false);
         final TextView textView = root.findViewById(R.id.text_account);
+        userTextView = root.findViewById(R.id.userName);
         accountViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -81,6 +85,18 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         btnSignOut.setOnClickListener(this);
 
         return root;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        accountViewModel = ViewModelProviders.of(getActivity()).get(AccountViewModel.class);
+        accountViewModel.getUserName().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                userTextView.setText(s);
+            }
+        });
     }
 
     @Override
@@ -128,6 +144,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+                sharedViewModel.setUserId(user);
+                ArrayList<String> userInfo = buildUserInfo(user);
+                userName = userInfo.get(1);
+                accountViewModel = ViewModelProviders.of(getActivity()).get(AccountViewModel.class);
+                accountViewModel.setUserName(userName);
+                Toast.makeText(getActivity(), ""+user.getEmail(), Toast.LENGTH_SHORT).show();
                 if (user != null) customUser(user);
                 // ...
             } else {
@@ -135,10 +158,20 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 // ...
+                Toast.makeText(getActivity(), ""+response.getError().getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
     // [END auth_fui_result]
+
+    public ArrayList<String> buildUserInfo(FirebaseUser user){
+        String uid = user.getUid();
+        String email = user.getEmail();
+        ArrayList<String> userInfo = new ArrayList<>();
+        userInfo.add(uid);
+        userInfo.add(email);
+        return userInfo;
+    }
 
     public void customUser(FirebaseUser user){
 
@@ -168,7 +201,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 .signOut(getActivity())
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
-                        // ...
+                        accountViewModel.clearUserName();
                     }
                 });
         // [END auth_fui_signout]
