@@ -8,13 +8,10 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.alspicks.ui.account.AccountFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 public class MainActivity extends AppCompatActivity /*implements AccountFragment.AccountFragmentListener*/{
-
-    private AccountFragment accountFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +27,5 @@ public class MainActivity extends AppCompatActivity /*implements AccountFragment
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
-        accountFragment = new AccountFragment();
     }
-
-    /*@Override
-    public void onUserSent(CharSequence userName) {
-        accountFragment.updateEditText(userName);
-    }*/
 }

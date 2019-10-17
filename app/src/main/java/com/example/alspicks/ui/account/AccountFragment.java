@@ -14,10 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.alspicks.NewTunes;
 import com.example.alspicks.R;
 import com.example.alspicks.SharedViewModel;
 import com.firebase.ui.auth.AuthUI;
@@ -26,13 +24,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -42,16 +35,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 public class AccountFragment extends Fragment implements View.OnClickListener {
 
     private AccountViewModel accountViewModel;
-    private SharedViewModel sharedViewModel;
-    private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "MainActivity";
-    private String userName;
-    TextView userTextView;
+    private TextView userTextView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +52,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(requireNonNull(getActivity()), gso);
         //----copied from MainActivity----//
 
 
@@ -71,12 +63,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         View root = inflater.inflate(R.layout.fragment_account, container, false);
         final TextView textView = root.findViewById(R.id.text_account);
         userTextView = root.findViewById(R.id.userName);
-        accountViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        accountViewModel.getText().observe(this, textView::setText);
 
         SignInButton btnGoogleSignIn = root.findViewById(R.id.sign_in_button);
         btnGoogleSignIn.setOnClickListener(this);
@@ -90,13 +77,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        accountViewModel = ViewModelProviders.of(getActivity()).get(AccountViewModel.class);
-        accountViewModel.getUserName().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                userTextView.setText(s);
-            }
-        });
+        accountViewModel = ViewModelProviders.of(requireNonNull(getActivity())).get(AccountViewModel.class);
+        accountViewModel.getUserName().observe(getViewLifecycleOwner(), s -> userTextView.setText(s));
     }
 
     @Override
@@ -116,7 +98,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void createSignInIntent() {
+    private void createSignInIntent() {
         // [START auth_fui_create_intent]
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -144,27 +126,27 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
-                sharedViewModel.setUserId(user);
+                SharedViewModel sharedViewModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
+                sharedViewModel.setUserId(requireNonNull(user));
                 ArrayList<String> userInfo = buildUserInfo(user);
-                userName = userInfo.get(1);
+                String userName = userInfo.get(1);
                 accountViewModel = ViewModelProviders.of(getActivity()).get(AccountViewModel.class);
                 accountViewModel.setUserName(userName);
                 Toast.makeText(getActivity(), ""+user.getEmail(), Toast.LENGTH_SHORT).show();
-                if (user != null) customUser(user);
-                // ...
+                customUser(user);
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 // ...
-                Toast.makeText(getActivity(), ""+response.getError().getMessage(), Toast.LENGTH_SHORT).show();
+                assert response != null;
+                Toast.makeText(getActivity(), ""+ requireNonNull(response.getError()).getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
     // [END auth_fui_result]
 
-    public ArrayList<String> buildUserInfo(FirebaseUser user){
+    private ArrayList<String> buildUserInfo(FirebaseUser user){
         String uid = user.getUid();
         String email = user.getEmail();
         ArrayList<String> userInfo = new ArrayList<>();
@@ -173,56 +155,33 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         return userInfo;
     }
 
-    public void customUser(FirebaseUser user){
+    private void customUser(FirebaseUser user){
 
         Map<String, Object> newUser = new HashMap<>();
         newUser.put("Name", user.getEmail());
         newUser.put("UID", user.getUid());
         newUser.put("Music", Collections.emptyList());
         db.collection("Users").add(newUser)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-
-                    }
-                });
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
-    public void signOut() {
+    private void signOut() {
         // [START auth_fui_signout]
         AuthUI.getInstance()
-                .signOut(getActivity())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        accountViewModel.clearUserName();
-                    }
-                });
+                .signOut(requireNonNull(getActivity()))
+                .addOnCompleteListener(task -> accountViewModel.clearUserName());
         // [END auth_fui_signout]
     }
 
     public void delete() {
         // [START auth_fui_delete]
         AuthUI.getInstance()
-                .delete(getActivity())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
-                    }
+                .delete(requireNonNull(getActivity()))
+                .addOnCompleteListener(task -> {
+                    // ...
                 });
         // [END auth_fui_delete]
     }
 
-    //we can probably relocate new tunes to one of the open fragments instead of another activity
-    public void openNewTunes() {
-        Intent intent = new Intent(getActivity(), NewTunes.class);
-        startActivity(intent);
-    }
 }
