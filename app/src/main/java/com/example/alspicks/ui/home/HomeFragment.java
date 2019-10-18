@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,56 +19,37 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.alspicks.NewTunes;
 import com.example.alspicks.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
+import com.example.alspicks.SharedViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
-    private HomeViewModel homeViewModel;
-
     //----copied from MainActivity----//
     private EditText edtArtist, edtAlbum, edtYear, edtStyle;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private static final String TAG = "MainActivity";
-    private ListView albumsListView;
 
     //private GoogleSignInClient mGoogleSignInClient;
     //private static final int RC_SIGN_IN = 9001;
     //----copied from MainActivity----//
      @SuppressLint("RestrictedApi")
+     private
     Context context = getApplicationContext();
 
-    CharSequence text = "Album added";
-    int duration = Toast.LENGTH_SHORT;
+    private CharSequence text = "Album added";
+    private int duration = Toast.LENGTH_SHORT;
 
-    Toast albumAdded = Toast.makeText(context, text, duration);
-
-
-    /*@Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //----copied from MainActivity----//
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
-        //----copied from MainActivity----//
-
-
-    }*/
+    private Toast albumAdded = Toast.makeText(context, text, duration);
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         edtArtist = root.findViewById(R.id.edtArtist);
@@ -83,15 +63,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         Button btnTunes = root.findViewById(R.id.BtnTunes);
         btnTunes.setOnClickListener(this);
-
-        /*SignInButton btnGoogleSignIn = root.findViewById(R.id.sign_in_button);
-        btnGoogleSignIn.setOnClickListener(this);
-
-        Button btnSignOut = root.findViewById(R.id.btnSignOut);
-        btnSignOut.setOnClickListener(this);*/
-
-
-
         //^^^-copied from MainActivity-^^^//
 
         return root;
@@ -121,96 +92,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-
-    /*public void createSignInIntent() {
-        // [START auth_fui_create_intent]
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                //new AuthUI.IdpConfig.PhoneBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
-
-        // Create and launch sign-in intent
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
-        // [END auth_fui_create_intent]
-    }*/
-
-    /*@Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-
-            if (resultCode == Activity.RESULT_OK) {
-                // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null) customUser(user);
-                // ...
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
-            }
-        }
-    }
-    // [END auth_fui_result]
-
-    public void customUser(FirebaseUser user){
-
-        Map<String, Object> newUser = new HashMap<>();
-        newUser.put("Name", user.getEmail());
-        newUser.put("UID", user.getUid());
-        newUser.put("Music", Collections.emptyList());
-        db.collection("Users").add(newUser)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-
-                    }
-                });
-    }
-
-    public void signOut() {
-        // [START auth_fui_signout]
-        AuthUI.getInstance()
-                .signOut(getActivity())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
-                    }
-                });
-        // [END auth_fui_signout]
-    }
-
-    public void delete() {
-        // [START auth_fui_delete]
-        AuthUI.getInstance()
-                .delete(getActivity())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
-                    }
-                });
-        // [END auth_fui_delete]
-    }*/
-
     //we can probably relocate new tunes to one of the open fragments instead of another activity
-    public void openNewTunes() {
+    private void openNewTunes() {
         Intent intent = new Intent(getActivity(), NewTunes.class);
         startActivity(intent);
     }
@@ -219,10 +102,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private void addAlbum() {
 
+        SharedViewModel sharedViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
         final String albumArtist = edtArtist.getText().toString();
         final String albumName = edtAlbum.getText().toString();
         final String albumYear = edtYear.getText().toString();
         final String albumStyle = edtStyle.getText().toString();
+        final String userID = sharedViewModel.getUid();
+        final String albumPath;
 
         // return if input fields are empty
         if (albumArtist.equals("") && albumName.equals("") && albumYear.equals("") && albumStyle.equals("")){
@@ -235,24 +121,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         album.put("name", albumName);
         album.put("year", albumYear);
         album.put("style", albumStyle);
+        album.put("origUser", sharedViewModel.getUid());
+
+        //albumPath = "Artists/" + albumArtist + "/Albums";
+
 
         // Add a new document with a generated ID
-        db.collection("albums")
-                .add(album)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
+        if(!userID.equals("")){
+            db.collection("albums")
+                    .document(albumName)
+                    .set(album)
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        albumAdded.show();
+                    })
+                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+            /*db.collection(albumPath)
+                    .add(album)
+                    .addOnSuccessListener(documentReference -> {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
+                        albumAdded.show();
+                    })
+                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));*/
 
-                    }
-                });
-        albumAdded.show();
+        }
 
     }
 
