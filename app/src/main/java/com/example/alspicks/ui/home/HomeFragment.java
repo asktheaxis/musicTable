@@ -123,7 +123,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         album.put("style", albumStyle);
         album.put("origUser", sharedViewModel.getUid());
 
-        //albumPath = "Artists/" + albumArtist + "/Albums";
 
 
         // Add a new document with a generated ID
@@ -136,13 +135,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         albumAdded.show();
                     })
                     .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
-            /*db.collection(albumPath)
-                    .add(album)
-                    .addOnSuccessListener(documentReference -> {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        albumAdded.show();
-                    })
-                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));*/
 
         }
 
