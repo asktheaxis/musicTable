@@ -193,7 +193,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         // [START auth_fui_signout]
         AuthUI.getInstance()
                 .signOut(requireNonNull(getActivity()))
-                .addOnCompleteListener(task -> sharedViewModel.clearUserTextBox());
+                .addOnCompleteListener(task -> {
+                    sharedViewModel.clearUserTextBox();
+                    sharedViewModel.signOut();
+                    sharedViewModel.clearUserId();
+                });
         // [END auth_fui_signout]
     }
 

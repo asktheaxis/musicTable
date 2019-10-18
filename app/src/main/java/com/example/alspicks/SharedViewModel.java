@@ -32,6 +32,14 @@ public class SharedViewModel extends ViewModel {
         return uid;
     }
 
+    public void clearUserId(){
+        uid = "";
+    }
+
+    public void signOut(){
+        user = null;
+    }
+
     public String buildUserName(){
         String email = user.getEmail();
         int index = email.indexOf('@');
