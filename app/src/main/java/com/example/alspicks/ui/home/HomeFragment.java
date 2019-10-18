@@ -121,27 +121,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         album.put("name", albumName);
         album.put("year", albumYear);
         album.put("style", albumStyle);
+        album.put("origUser", sharedViewModel.getUid());
 
-
-        albumPath = "Artists/" + albumArtist + "/Albums";
+        //albumPath = "Artists/" + albumArtist + "/Albums";
 
 
         // Add a new document with a generated ID
         if(!userID.equals("")){
-            db.collection(userID)
+            db.collection("albums")
+                    .document(albumName)
+                    .set(album)
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        albumAdded.show();
+                    })
+                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+            /*db.collection(albumPath)
                     .add(album)
                     .addOnSuccessListener(documentReference -> {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                         albumAdded.show();
                     })
-                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
-            db.collection(albumPath)
-                    .add(album)
-                    .addOnSuccessListener(documentReference -> {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        albumAdded.show();
-                    })
-                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));*/
 
         }
 

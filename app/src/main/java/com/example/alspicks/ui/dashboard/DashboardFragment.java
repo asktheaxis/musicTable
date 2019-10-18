@@ -17,7 +17,9 @@ import com.example.alspicks.R;
 import com.example.alspicks.SharedViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -40,7 +42,11 @@ public class DashboardFragment extends Fragment {
 
 
         if(!userID.equals("")) {
-            db.collection(userID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            CollectionReference albumsRef = db.collection("albums");
+            Query query = albumsRef.whereEqualTo("origUser", userID);
+            db.collection("albums")
+                    .whereEqualTo("origUser", userID)
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     ArrayList<Album> albumArrayList = new ArrayList<Album>();
                     if (task.isSuccessful()) {
