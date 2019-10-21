@@ -18,4 +18,20 @@
         <item>Dark-Theme</item>
     </string-array>
 
+    <string-array name="genre_array">
+        <item>Pop</item>
+        <item>Jazz</item>
+        <item>Rock</item>
+        <item>Folk</item>
+        <item>Hip-Hop</item>
+        <item>Blues</item>
+        <item>Country</item>
+        <item>Classical</item>
+        <item>Metal</item>
+        <item>EDM</item>
+        <item>Alternative</item>
+        <item>Psychedelic Rock</item>
+        <item>Musical Theatre</item>
+    </string-array>
+
 </resources>
