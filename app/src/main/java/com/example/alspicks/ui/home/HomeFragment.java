@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,8 @@ import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
     //----copied from MainActivity----//
-    private EditText edtArtist, edtAlbum, edtYear, edtStyle;
+    private EditText edtArtist, edtAlbum, edtYear;
+    private Spinner edtStyle;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private static final String TAG = "MainActivity";
@@ -79,7 +81,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 addAlbum();
                 edtAlbum.getText().clear();
                 edtArtist.getText().clear();
-                edtStyle.getText().clear();
+                edtStyle.setSelection(0);
                 edtYear.getText().clear();
             break;
 
@@ -106,7 +108,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         final String albumArtist = edtArtist.getText().toString();
         final String albumName = edtAlbum.getText().toString();
         final String albumYear = edtYear.getText().toString();
-        final String albumStyle = edtStyle.getText().toString();
+        final String albumStyle = edtStyle.getSelectedItem().toString();
         final String userID = sharedViewModel.getUid();
         final String albumPath;
 
