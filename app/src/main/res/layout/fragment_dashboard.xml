@@ -41,6 +41,8 @@
                     android:layout_weight="1"
                     android:fontFamily="serif"
                     android:gravity="center"
+                    android:clickable="true"
+                    android:onClick="artistClick"
                     android:text="Artist"
                     android:textColor="#000" />
 
@@ -61,6 +63,8 @@
                     android:layout_weight="1"
                     android:fontFamily="serif"
                     android:gravity="center"
+                    android:clickable="true"
+
                     android:text="Year"
                     android:textColor="#000" />
 
@@ -71,6 +75,7 @@
                     android:layout_weight="1"
                     android:fontFamily="serif"
                     android:gravity="center"
+                    android:clickable="true"
                     android:text="Style"
                     android:textColor="#000" />
 
