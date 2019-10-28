@@ -22,10 +22,8 @@ public class NewTunes extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-sort
         //setContentView(R.layout.newtunes_style);
         setTheme(R.style.Theme_darkTheme);
-master
         albumsListView = findViewById(R.id.records_view);
         Button btnMain = findViewById(R.id.BtnMain);
 
