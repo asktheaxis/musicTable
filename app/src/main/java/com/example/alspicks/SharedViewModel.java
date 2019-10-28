@@ -1,16 +1,23 @@
 package com.example.alspicks;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public class SharedViewModel extends ViewModel {
     String uid = "";
     FirebaseUser user;
     private MutableLiveData<String> userTextBox;
     String userName;
+    private static final String TAG = "MainActivity";
+    private String albumNameEncoded;
 
     /*public SharedViewModel(MutableLiveData<String> userName) {
         this.userName = userName;
@@ -60,6 +67,16 @@ public class SharedViewModel extends ViewModel {
 
     public void clearUserTextBox(){
         userTextBox.setValue(null);
+    }
+
+    private String createAlbumSearchURL(String name){
+        try {
+            albumNameEncoded = URLEncoder.encode(name, "UTF-8");
+        } catch (UnsupportedEncodingException e){
+            Log.w(TAG, "Error encoding URL", e);
+        }
+        String url = "http://api.discogs.com/database/search?type=album&q=" + albumNameEncoded;
+        return url;
     }
 
 }
