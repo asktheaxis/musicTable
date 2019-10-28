@@ -41,6 +41,8 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:gravity="center"
+                        android:clickable="true"
+                        android:onClick="artistClick"
                         android:text="Artist"
                         style="?textRegular" />
 
@@ -51,6 +53,8 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:gravity="center"
+                        android:clickable="true"
+
                         android:text="Album"
                         style="?textRegular" />
 
@@ -61,6 +65,8 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:gravity="center"
+                        android:clickable="true"
+                        android:onClick="yearClick"
                         android:text="Year"
                         style="?textRegular" />
 
@@ -71,6 +77,8 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:gravity="center"
+                        android:clickable="true"
+                        android:onClick="styleClick"
                         android:text="Style"
                         style="?textRegular" />
 
