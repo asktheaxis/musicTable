@@ -22,6 +22,7 @@ public class NewTunes extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_darkTheme);
         setContentView(R.layout.newtunes_style);
         albumsListView = findViewById(R.id.records_view);
         Button btnMain = findViewById(R.id.BtnMain);

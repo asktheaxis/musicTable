@@ -17,7 +17,6 @@
         android:layout_marginTop="26dp"
         android:fontFamily="serif"
         android:text="Add a great album!"
-        android:textColor="#000"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

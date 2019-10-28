@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    style="?pageBackground">
     <TextView
         android:id="@+id/record_artist"
         android:fontFamily="serif"
@@ -9,11 +10,11 @@
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:paddingRight="2dp"
-        android:textColor="#000"
+        style="?textRegular"
         android:text="@string/Artist"/>
     <TextView
         android:id="@+id/record_album"
-        android:textColor="#000"
+        style="?textRegular"
         android:fontFamily="serif"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
         android:minWidth="20dp"
         android:text="@string/Album"/>
     <TextView
-        android:textColor="#000"
+        style="?textRegular"
         android:id="@+id/record_year"
         android:fontFamily="serif"
         android:layout_height="wrap_content"
@@ -33,7 +34,7 @@
         android:maxWidth="10dp"
         android:text="@string/Year"/>
     <TextView
-        android:textColor="#000"
+        style="?textRegular"
         android:id="@+id/record_style"
         android:fontFamily="serif"
         android:layout_height="wrap_content"
