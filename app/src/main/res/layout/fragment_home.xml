@@ -132,11 +132,12 @@
         android:id="@+id/imageView4"
         android:layout_width="98dp"
         android:layout_height="87dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="84dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/edtStyle"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@android:color/transparent" />
 
     <ImageView
