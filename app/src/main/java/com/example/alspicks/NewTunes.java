@@ -22,7 +22,8 @@ public class NewTunes extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.newtunes_style);
+        //setContentView(R.layout.newtunes_style);
+        setTheme(R.style.Theme_darkTheme);
         albumsListView = findViewById(R.id.records_view);
         Button btnMain = findViewById(R.id.BtnMain);
 
@@ -56,11 +57,11 @@ public class NewTunes extends AppCompatActivity {
         return (ArrayList<Album>) albumArrayList.stream().sorted(Comparator.comparing(Album::getArtist)).collect(Collectors.toList());
     }
 
-    public ArrayList<Album> yearSort(ArrayList<Album> albumArrayList) {
+    public static ArrayList<Album> yearSort(ArrayList<Album> albumArrayList) {
         return (ArrayList<Album>) albumArrayList.stream().sorted(Comparator.comparing(Album::getYear)).collect(Collectors.toList());
     }
 
-    public ArrayList<Album> styleSort(ArrayList<Album> albumArrayList) {
+    public static ArrayList<Album> styleSort(ArrayList<Album> albumArrayList) {
         return (ArrayList<Album>) albumArrayList.stream().sorted(Comparator.comparing(Album::getStyle)).collect(Collectors.toList());
     }
 }
