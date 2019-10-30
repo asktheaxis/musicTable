@@ -3,12 +3,16 @@ package com.example.alspicks;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+
+import static java.util.Objects.requireNonNull;
 
 
 public class MainActivity extends AppCompatActivity /*implements AccountFragment.AccountFragmentListener*/{
@@ -27,5 +31,7 @@ public class MainActivity extends AppCompatActivity /*implements AccountFragment
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+        SharedViewModel sharedViewModel = ViewModelProviders.of(requireNonNull(this)).get(SharedViewModel.class);
+        sharedViewModel.setUserId(requireNonNull(FirebaseAuth.getInstance().getCurrentUser()));
     }
 }

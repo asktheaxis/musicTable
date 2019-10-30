@@ -39,7 +39,7 @@ public class DashboardFragment extends Fragment {
         String userID = sharedViewModel.getUid();
 
 
-       TextView artist = root.findViewById(R.id.header_artist);
+        TextView artist = root.findViewById(R.id.header_artist);
         artist.setOnClickListener(v -> onClick(v));
         TextView year = root.findViewById(R.id.header_year);
         year.setOnClickListener(v -> onClick(v));
