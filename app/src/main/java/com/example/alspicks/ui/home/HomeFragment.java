@@ -169,7 +169,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    private String createSearchURL(String search, String query){
+    public String createSearchURL(String search, String query){
         String searchEncoded = null;
         String queryEncoded = null;
         try {
