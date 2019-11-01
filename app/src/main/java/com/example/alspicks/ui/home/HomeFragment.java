@@ -21,8 +21,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.alspicks.BuildConfig;
@@ -52,7 +50,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String albumYear, artistFinal, albumFinal;
     private ArrayList<String> albumStyles = new ArrayList<>();
-    private RequestQueue requestQueue;
+    private int artistId = 0;
 
     private static final String TAG = "MainActivity";
 
@@ -134,15 +132,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         if (!artistInput.equals("") && !albumInput.equals("")){
             searchType = "title";
             query = artistInput + " - " + albumInput;
+            searchAlbums(searchType, query);
         } else if (artistInput.equals("") && !albumInput.equals("")) {
             searchType = "album";
             query = albumInput;
+            searchAlbums(searchType, query);
         } else {
             searchType = "artist";
             query = artistInput;
+            searchArtist(searchType, query);
         }
-
-        search(searchType, query);
 
 
 
@@ -183,44 +182,98 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         return url;
     }
 
-    private void search(String searchType, String query){
+    private String createArtistSearchURL(int id){
+        String artistId = Integer.toString(id);
+        String idEncoded = null;
+        try {
+            idEncoded = URLEncoder.encode(artistId, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.w(TAG, "Error encoding URL", e);
+        }
+        String url = "https://api.discogs.com/artists/" + idEncoded + "/releases?sort=year&sort_order=asc&key=" + BuildConfig.CONSUMER_KEY + "&secret=" + BuildConfig.CONSUMER_SECRET;
+        return url;
+    }
+
+    private void searchAlbums(String searchType, String query){
         RequestQueue requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 createSearchURL(searchType, query),
                 null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response){
-                        //Convert Json to Album Object to add to DB
-                        Log.w("Rest Response", response.toString());
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("results");
-                            JSONObject overallResultsObject = jsonArray.getJSONObject(0);
-                            //overallResultsObject.get("year");
-                            ArrayList<String> urls = new ArrayList<>();
-                            for (int i = 0; i < 4; i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String url = jsonObject.getString("cover_image");
-                                urls.add(url);
-                                Log.w("Discogs result ", jsonObject.toString());
-                            }
-                            Picasso.with(getContext()).load(urls.get(0)).fit().into(imageView1);
-                            Picasso.with(getContext()).load(urls.get(1)).fit().into(imageView2);
-                            Picasso.with(getContext()).load(urls.get(2)).fit().into(imageView3);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                response -> {
+                    //Convert Json to Album Object to add to DB
+                    Log.w("Rest Response", response.toString());
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("results");
+                        ArrayList<String> urls = new ArrayList<>();
+                        for (int i = 0; i < 4; i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String url = jsonObject.getString("cover_image");
+                            urls.add(url);
+                            Log.w("Discogs Albums result ", jsonObject.toString());
                         }
+                        Picasso.with(getContext()).load(urls.get(0)).fit().into(imageView1);
+                        Picasso.with(getContext()).load(urls.get(1)).fit().into(imageView2);
+                        Picasso.with(getContext()).load(urls.get(2)).fit().into(imageView3);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.w("Error requesting Json data", error.toString());
-                    }
-                }
+                error -> Log.w("Error requesting Json data", error.toString())
         );
 
+        requestQueue.add(objectRequest);
+    }
+
+    private void searchArtist(String searchType, String query){
+        RequestQueue requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                createSearchURL(searchType, query),
+                null,
+                response -> {
+                    Log.w("Searching Artists...looking for id: ", response.toString());
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("results");
+                        JSONObject overallResultsObject = jsonArray.getJSONObject(0);
+                        artistId = overallResultsObject.getInt("id");
+                        String albumsUrl = createArtistSearchURL(artistId);
+                        searchAlbumByArtist(albumsUrl);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> Log.w("Error requesting Artists by id", error.toString())
+        );
+        requestQueue.add(objectRequest);
+    }
+
+    private void searchAlbumByArtist(String url){
+        RequestQueue requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> {
+                    //Convert Json to Album Object to add to DB
+                    Log.w("Searching Albums by Artist w/ id ", response.toString());
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("releases");
+                        ArrayList<String> urls = new ArrayList<>();
+                        for (int i = 0; i < 4; i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String url1 = jsonObject.getString("thumb");
+                            urls.add(url1);
+                        }
+                        Picasso.with(getContext()).load(urls.get(0)).fit().into(imageView1);
+                        Picasso.with(getContext()).load(urls.get(1)).fit().into(imageView2);
+                        Picasso.with(getContext()).load(urls.get(2)).fit().into(imageView3);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> Log.w("Error requesting Albums by Artist", error.toString())
+        );
         requestQueue.add(objectRequest);
     }
 }
