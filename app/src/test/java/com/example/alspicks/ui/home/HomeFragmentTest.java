@@ -24,8 +24,7 @@ class HomeFragmentTest extends HomeFragment {
 
     @Test
     void createSearchURL() throws IOException {
-        HomeFragment homeFragment = new HomeFragment();
-        String url = homeFragment.createSearchURL("artist", "frank zappa");
+        String url = createSearchURL("artist", "frank zappa");
         final URL urll = new URL(url);
         HttpURLConnection huc = (HttpURLConnection) urll.openConnection();
         huc.setRequestMethod("HEAD");
@@ -37,6 +36,7 @@ class HomeFragmentTest extends HomeFragment {
 
     @Test
     void searchAlbums() throws IOException {
+        //searchAlbums("album", "sleep dirt");
         ArrayList<String> urls = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
         JsonObjectRequest objectRequest = new JsonObjectRequest(

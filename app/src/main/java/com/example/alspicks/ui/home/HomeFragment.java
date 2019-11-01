@@ -169,6 +169,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
+    //FIXME MAKE PRIVATE AFTER MONDAY BLACK BOX
     public String createSearchURL(String search, String query){
         String searchEncoded = null;
         String queryEncoded = null;
@@ -194,7 +195,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         return url;
     }
 
-    private void searchAlbums(String searchType, String query){
+    //FIXME MAKE PRIVATE AFTER MONDAY BLACK BOX
+    public void searchAlbums(String searchType, String query){
         RequestQueue requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
