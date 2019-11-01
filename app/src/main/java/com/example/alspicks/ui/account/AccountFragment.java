@@ -47,23 +47,24 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "MainActivity";
     private TextView userTextView;
+    FirebaseUser user;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //----copied from MainActivity----//
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(requireNonNull(getActivity()), gso);
-        //----copied from MainActivity----//
-
 
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         accountViewModel = ViewModelProviders.of(this).get(AccountViewModel.class);
         View root = inflater.inflate(R.layout.fragment_account, container, false);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(requireNonNull(getActivity()), gso);
+
         final TextView textView = root.findViewById(R.id.text_account);
         userTextView = root.findViewById(R.id.userName);
         accountViewModel.getText().observe(this, textView::setText);
@@ -128,7 +129,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
                 SharedViewModel sharedViewModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
                 sharedViewModel.setUser(user);
                 sharedViewModel.setUserId(requireNonNull(user));
