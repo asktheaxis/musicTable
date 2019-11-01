@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -170,10 +171,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         SharedViewModel sharedViewModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
 
         Map<String, Object> newUser = new HashMap<>();
-        newUser.put("Name", user.getEmail());
+        newUser.put("Username", accountViewModel.getUserName());
         newUser.put("UID", user.getUid());
         newUser.put("Music", Collections.emptyList());
-        db.collection("Users").document(sharedViewModel.buildUserName())
+        String username = sharedViewModel.buildUserName();
+        db.collection("Users").document(username)
                 .set(newUser)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -187,6 +189,31 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
+
+        // Create a dummy album with Artist, Album, Year, and Genre
+        final Map<String, Object> firstAlbum = new HashMap<>();
+        firstAlbum.put("username", username);
+
+        db.collection("Users")
+                .document("username")
+                .collection("Incoming")
+                .add(firstAlbum)
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    })
+                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+
+        db.collection("Users")
+                .document("username")
+                .collection("Outgoing")
+                .add(firstAlbum)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                })
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+
+
+
     }
 
     private void signOut() {
