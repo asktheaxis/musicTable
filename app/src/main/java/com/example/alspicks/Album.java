@@ -6,12 +6,14 @@ import androidx.annotation.Nullable;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class Album implements Collection<Album> {
+
+public class Album implements Collection<Album>{
     //Firebase requires these to be public
     public String name;
     public String artist;
     public String year;
     public String style;
+
 
     public Album(){}
 
