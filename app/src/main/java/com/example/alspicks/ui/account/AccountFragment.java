@@ -201,7 +201,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         db.collection("Users")
                 .document(username)
                 .collection("Incoming")
-                .add(firstAlbum)
+                .document("DUMMY")
+                .set(firstAlbum)
                     .addOnSuccessListener(documentReference -> {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                     })
