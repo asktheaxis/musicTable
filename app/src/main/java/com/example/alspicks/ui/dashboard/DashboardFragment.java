@@ -93,8 +93,8 @@ public class DashboardFragment extends Fragment {
                         artistSort = NewTunes.yearSort(albumArrayList);
                     else if (sort == 2) //style
                         artistSort = NewTunes.styleSort(albumArrayList);
-                   // else if (sort == 3)
-                      //  artistSort = NewTunes.albumSort(albumArrayList);
+                    else if (sort == 3)
+                       artistSort = NewTunes.albumSort(albumArrayList);
                     else
                         artistSort = NewTunes.defaultSort(albumArrayList);
                     AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(root.getContext(), artistSort);
