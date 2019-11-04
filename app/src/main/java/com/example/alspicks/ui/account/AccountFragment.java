@@ -130,7 +130,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
-
+                user = FirebaseAuth.getInstance().getCurrentUser();
                 SharedViewModel sharedViewModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
                 sharedViewModel.setUser(user);
                 sharedViewModel.setUserId(requireNonNull(user));
@@ -170,11 +170,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private void customUser(FirebaseUser user){
         SharedViewModel sharedViewModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
 
-        Map<String, Object> newUser = new HashMap<>();
-        newUser.put("Username", accountViewModel.getUserName());
-        newUser.put("UID", user.getUid());
-        newUser.put("Music", Collections.emptyList());
         String username = sharedViewModel.buildUserName();
+
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("Username", username);
+        newUser.put("UID", user.getUid());
+
+
+
         db.collection("Users").document(username)
                 .set(newUser)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -194,8 +197,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         final Map<String, Object> firstAlbum = new HashMap<>();
         firstAlbum.put("username", username);
 
+        //creates Users/USERNAME/Incoming collection with 1 blank doc
         db.collection("Users")
-                .document("username")
+                .document(username)
                 .collection("Incoming")
                 .add(firstAlbum)
                     .addOnSuccessListener(documentReference -> {
@@ -203,10 +207,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                     })
                     .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
+        //creates Users/USERNAME/Outgoing collection with 1 blank doc
         db.collection("Users")
-                .document("username")
+                .document(username)
                 .collection("Outgoing")
-                .add(firstAlbum)
+                .document("DUMMY")
+                .set(firstAlbum)
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, "DocumentSnapshot successfully written!");
                 })
