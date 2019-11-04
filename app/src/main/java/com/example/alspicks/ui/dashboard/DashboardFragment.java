@@ -45,6 +45,8 @@ public class DashboardFragment extends Fragment {
         year.setOnClickListener(v -> onClick(v));
         TextView style = root.findViewById(R.id.header_style);
         style.setOnClickListener(v -> onClick(v));
+        TextView album = root.findViewById(R.id.header_album);
+        album.setOnClickListener(v -> onClick(v));
 
         getAlbums(userID);
 
@@ -91,6 +93,8 @@ public class DashboardFragment extends Fragment {
                         artistSort = NewTunes.yearSort(albumArrayList);
                     else if (sort == 2) //style
                         artistSort = NewTunes.styleSort(albumArrayList);
+                   // else if (sort == 3)
+                      //  artistSort = NewTunes.albumSort(albumArrayList);
                     else
                         artistSort = NewTunes.defaultSort(albumArrayList);
                     AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(root.getContext(), artistSort);
@@ -121,6 +125,13 @@ public class DashboardFragment extends Fragment {
         getAlbums(userID, 2);
     }
 
+
+    private void albumClick(View v) {
+        SharedViewModel sharedViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
+        String userID = sharedViewModel.getUid();
+        getAlbums(userID, 3);
+    }
+
     private void onClick(View v) {
         switch (v.getId()) {
 
@@ -134,6 +145,10 @@ public class DashboardFragment extends Fragment {
 
             case R.id.header_style:
                 styleClick(v);
+                break;
+
+            case R.id.header_album:
+                albumClick(v);
                 break;
 
             default:
