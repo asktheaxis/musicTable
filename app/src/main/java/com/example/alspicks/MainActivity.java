@@ -32,6 +32,6 @@ public class MainActivity extends AppCompatActivity /*implements AccountFragment
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
         SharedViewModel sharedViewModel = ViewModelProviders.of(requireNonNull(this)).get(SharedViewModel.class);
-        sharedViewModel.setUserId(requireNonNull(FirebaseAuth.getInstance().getCurrentUser()));
+        //sharedViewModel.setUserId(requireNonNull(FirebaseAuth.getInstance().getCurrentUser()));
     }
 }
