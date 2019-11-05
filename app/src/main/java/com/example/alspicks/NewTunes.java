@@ -64,4 +64,8 @@ public class NewTunes extends AppCompatActivity {
     public static ArrayList<Album> styleSort(ArrayList<Album> albumArrayList) {
         return (ArrayList<Album>) albumArrayList.stream().sorted(Comparator.comparing(Album::getStyle)).collect(Collectors.toList());
     }
+
+    public static ArrayList<Album> albumSort(ArrayList<Album> albumArrayList) {
+        return (ArrayList<Album>) albumArrayList.stream().sorted(Comparator.comparing(Album::getName)).collect(Collectors.toList());
+    }
 }
