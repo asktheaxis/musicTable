@@ -138,7 +138,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             searchType = "album";
             query = albumInput;
             searchAlbums(searchType, query);
-            setImages(urls);
         } else {
             searchType = "artist";
             query = artistInput;
@@ -171,8 +170,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    //FIXME MAKE PRIVATE AFTER MONDAY BLACK BOX
-    public String createSearchURL(String search, String query){
+    private String createSearchURL(String search, String query){
         String searchEncoded = null;
         String queryEncoded = null;
         try {
@@ -185,7 +183,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         return url;
     }
 
-    public String createArtistSearchURL(int id) throws Exception {
+    private String createArtistSearchURL(int id) throws Exception {
         if (id < 0){
             throw new Exception("artist id must be greater than zero!");
         } else {
@@ -201,7 +199,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    /*private void searchAlbums(String searchType, String query){
+    private void searchAlbums(String searchType, String query){
         RequestQueue requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
@@ -228,44 +226,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 },
                 error -> Log.w("Error requesting Json data", error.toString())
         );
-
         requestQueue.add(objectRequest);
-    }*/
-
-    //FIXME MAKE PRIVATE AFTER MONDAY BLACK BOX
-    public ArrayList<String> searchAlbums(String searchType, String query){
-        RequestQueue requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
-        JsonObjectRequest objectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                createSearchURL(searchType, query),
-                null,
-                response -> {
-                    //Convert Json to Album Object to add to DB
-                    Log.w("Rest Response", response.toString());
-                    try {
-                        JSONArray jsonArray = response.getJSONArray("results");
-                        for (int i = 0; i < 4; i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            String url = jsonObject.getString("cover_image");
-                            urls.add(url);
-                            Log.w("Discogs Albums result ", jsonObject.toString());
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                },
-                error -> Log.w("Error requesting Json data", error.toString())
-        );
-        requestQueue.add(objectRequest);
-        return urls;
-    }
-
-    private void setImages(ArrayList<String> urls){
-        for(String link : urls) {
-            Picasso.with(getContext()).load(urls.get(0)).fit().into(imageView1);
-            Picasso.with(getContext()).load(urls.get(1)).fit().into(imageView2);
-            Picasso.with(getContext()).load(urls.get(2)).fit().into(imageView3);
-        }
     }
 
     private void searchArtist(String searchType, String query){
