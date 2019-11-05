@@ -48,9 +48,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private Spinner edtStyle;
     private ImageView imageView1, imageView2, imageView3;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String albumYear, artistFinal, albumFinal;
+    private String finalYear, finalArtist, finalAlbum;
     private ArrayList<String> albumStyles = new ArrayList<>();
-    ArrayList<String> urls = new ArrayList<>();
     private int artistId = 0;
 
     private static final String TAG = "MainActivity";
