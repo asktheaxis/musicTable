@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -129,7 +130,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
-
+                user = FirebaseAuth.getInstance().getCurrentUser();
                 SharedViewModel sharedViewModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
                 sharedViewModel.setUser(user);
                 sharedViewModel.setUserId(requireNonNull(user));
@@ -169,11 +170,15 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private void customUser(FirebaseUser user){
         SharedViewModel sharedViewModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
 
+        String username = sharedViewModel.buildUserName();
+
         Map<String, Object> newUser = new HashMap<>();
-        newUser.put("Name", user.getEmail());
+        newUser.put("Username", username);
         newUser.put("UID", user.getUid());
-        newUser.put("Music", Collections.emptyList());
-        db.collection("Users").document(sharedViewModel.buildUserName())
+
+
+
+        db.collection("Users").document(username)
                 .set(newUser)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -187,6 +192,35 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
+
+        // Create a dummy album with Artist, Album, Year, and Genre
+        final Map<String, Object> firstAlbum = new HashMap<>();
+        firstAlbum.put("username", username);
+
+        //creates Users/USERNAME/Incoming collection with 1 blank doc
+        db.collection("Users")
+                .document(username)
+                .collection("Incoming")
+                .document("DUMMY")
+                .set(firstAlbum)
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    })
+                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+
+        //creates Users/USERNAME/Outgoing collection with 1 blank doc
+        db.collection("Users")
+                .document(username)
+                .collection("Outgoing")
+                .document("DUMMY")
+                .set(firstAlbum)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                })
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+
+
+
     }
 
     private void signOut() {
