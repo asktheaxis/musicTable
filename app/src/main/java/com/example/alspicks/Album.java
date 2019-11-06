@@ -3,6 +3,7 @@ package com.example.alspicks;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -12,12 +13,12 @@ public class Album implements Collection<Album>{
     public String name;
     public String artist;
     public String year;
-    public String style;
+    public ArrayList<String> style;
 
 
     public Album(){}
 
-    public Album(String artist, String name, String year, String style){
+    public Album(String artist, String name, String year, ArrayList<String> style){
         this.name = name;
         this.artist = artist;
         this.year = year;
@@ -36,7 +37,7 @@ public class Album implements Collection<Album>{
         return year;
     }
 
-    String getStyle(){
+    ArrayList<String> getStyle(){
         return style;
     }
 

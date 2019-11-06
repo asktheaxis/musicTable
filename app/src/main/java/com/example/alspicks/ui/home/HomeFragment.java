@@ -23,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.alspicks.Album;
 import com.example.alspicks.BuildConfig;
 import com.example.alspicks.NewTunes;
 import com.example.alspicks.R;
@@ -51,6 +52,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private String finalYear, finalArtist, finalAlbum;
     private ArrayList<String> albumStyles = new ArrayList<>();
     private int artistId = 0;
+    SharedViewModel svModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
+    ArrayList<Album> albumArrayList = new ArrayList<>();
 
     private static final String TAG = "MainActivity";
 
@@ -116,6 +119,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     //we can probably relocate new tunes to one of the open fragments instead of another activity
     private void openNewTunes() {
         Intent intent = new Intent(getActivity(), NewTunes.class);
+        startActivity(intent);
+    }
+
+    private void openResultsFragment() {
+        Intent intent = new Intent(getActivity(), ResultsFragment.class);
         startActivity(intent);
     }
 
@@ -209,16 +217,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     Log.w("Rest Response", response.toString());
                     try {
                         JSONArray jsonArray = response.getJSONArray("results");
-                        ArrayList<String> urls = new ArrayList<>();
+                        //ArrayList<String> urls = new ArrayList<>();
                         for (int i = 0; i < 4; i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             String url = jsonObject.getString("cover_image");
-                            urls.add(url);
+                            //urls.add(url);
                             Log.w("Discogs Albums result ", jsonObject.toString());
+                            String artist, album, year;
+                            ArrayList<String> styles = new ArrayList<>();
+                            artist = jsonObject.getString("artist");
+                            album = jsonObject.getString("release_title");
+                            year = jsonObject.getString("year");
+                            for (int j = 0; i < 5; i++){
+                                styles.add(jsonObject.getJSONArray("syles").getString(j));
+                            }
+                            Album albuml = new Album(artist, album, year, styles);
+                            albumArrayList.add(albuml);
+                            svModel.setAlbumResults(albumArrayList);
+                            openResultsFragment();
                         }
-                        Picasso.with(getContext()).load(urls.get(0)).fit().into(imageView1);
-                        Picasso.with(getContext()).load(urls.get(1)).fit().into(imageView2);
-                        Picasso.with(getContext()).load(urls.get(2)).fit().into(imageView3);
+                        //Picasso.with(getContext()).load(urls.get(0)).fit().into(imageView1);
+                        //Picasso.with(getContext()).load(urls.get(1)).fit().into(imageView2);
+                        //Picasso.with(getContext()).load(urls.get(2)).fit().into(imageView3);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
