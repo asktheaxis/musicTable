@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +24,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.alspicks.Album;
 import com.example.alspicks.BuildConfig;
-import com.example.alspicks.NewTunes;
 import com.example.alspicks.R;
 import com.example.alspicks.SharedViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -45,14 +43,12 @@ import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
     //----copied from MainActivity----//
-    private EditText edtArtist, edtAlbum, edtYear;
-    private Spinner edtStyle;
+    private EditText edtArtist, edtAlbum;
     private ImageView imageView1, imageView2, imageView3;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String finalYear, finalArtist, finalAlbum;
     private ArrayList<String> albumStyles = new ArrayList<>();
     private int artistId = 0;
-    SharedViewModel svModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
     ArrayList<Album> albumArrayList = new ArrayList<>();
 
     private static final String TAG = "MainActivity";
@@ -75,8 +71,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         edtArtist = root.findViewById(R.id.edtArtist);
         edtAlbum = root.findViewById(R.id.edtAlbum);
-        edtYear = root.findViewById(R.id.edtYear);
-        edtStyle = root.findViewById(R.id.edtStyle);
 
         //for testing
         imageView1 = root.findViewById(R.id.imageView3);
@@ -99,27 +93,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-
-            case R.id.BtnSave:
-                addAlbum();
-                edtStyle.setSelection(0);
-                edtYear.getText().clear();
-            break;
-
-            case R.id.BtnTunes:
-                openNewTunes();
-                break;
-
-            default:
-                break;
+        if (v.getId() == R.id.BtnSave) {
+            addAlbum();
         }
-    }
-
-    //we can probably relocate new tunes to one of the open fragments instead of another activity
-    private void openNewTunes() {
-        Intent intent = new Intent(getActivity(), NewTunes.class);
-        startActivity(intent);
     }
 
     private void openResultsFragment() {
@@ -150,8 +126,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             query = artistInput;
             searchArtist(searchType, query);
         }
-
-
 
         /*// Create a new album with Artist, Album, Year, and Genre
         final Map<String, Object> album = new HashMap<>();
@@ -217,24 +191,36 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     Log.w("Rest Response", response.toString());
                     try {
                         JSONArray jsonArray = response.getJSONArray("results");
-                        //ArrayList<String> urls = new ArrayList<>();
-                        for (int i = 0; i < 4; i++) {
+                        SharedViewModel svModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
+                        for (int i = 0; i < 50; i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            String url = jsonObject.getString("cover_image");
-                            //urls.add(url);
-                            Log.w("Discogs Albums result ", jsonObject.toString());
-                            String artist, album, year;
-                            ArrayList<String> styles = new ArrayList<>();
-                            artist = jsonObject.getString("artist");
-                            album = jsonObject.getString("release_title");
-                            year = jsonObject.getString("year");
-                            for (int j = 0; i < 5; i++){
-                                styles.add(jsonObject.getJSONArray("syles").getString(j));
+                            try {
+                                if (!jsonObject.getString("title").isEmpty() && !jsonObject.getString("year").isEmpty()
+                                        && !jsonObject.getString("cover_image").isEmpty() && !jsonObject.getJSONArray("style").isNull(0)
+                                        && !jsonObject.getJSONArray("genre").isNull(0)) {
+                                    Log.w("Discogs Album result ", jsonObject.toString());
+                                    String artist, album, year, title, url;
+                                    ArrayList<String> styles = new ArrayList<>();
+                                    ArrayList<String> genres = new ArrayList<>();
+                                    url = jsonObject.getString("cover_image");
+                                    title = jsonObject.getString("title");
+                                    String[] parseString = title.split(" - ", 2);
+                                    artist = parseString[0];
+                                    album = parseString[1];
+                                    year = jsonObject.getString("year");
+                                    for (int j = 0; j < jsonObject.getJSONArray("style").length(); j++){
+                                        styles.add(jsonObject.getJSONArray("style").getString(j));
+                                    }
+                                    for (int k = 0; k < jsonObject.getJSONArray("genre").length(); k++){
+                                        genres.add(jsonObject.getJSONArray("genre").getString(k));
+                                    }
+                                    Album albuml = new Album(artist, album, year, styles, genres, url);
+                                    albumArrayList.add(albuml);
+                                    //svModel.setAlbumResults(albumArrayList); NEEDS TO BE ON CALLBACK
+                                }
+                            } catch (JSONException e){
+                                Log.w("Result was not an album", e);
                             }
-                            Album albuml = new Album(artist, album, year, styles);
-                            albumArrayList.add(albuml);
-                            svModel.setAlbumResults(albumArrayList);
-                            openResultsFragment();
                         }
                         //Picasso.with(getContext()).load(urls.get(0)).fit().into(imageView1);
                         //Picasso.with(getContext()).load(urls.get(1)).fit().into(imageView2);

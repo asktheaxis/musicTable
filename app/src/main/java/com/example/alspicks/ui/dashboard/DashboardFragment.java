@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.alspicks.Album;
 import com.example.alspicks.AlbumArrayAdapter;
-import com.example.alspicks.NewTunes;
 import com.example.alspicks.R;
 import com.example.alspicks.SharedViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -65,8 +64,7 @@ public class DashboardFragment extends Fragment {
                         Album albums = document.toObject(Album.class);
                         albumArrayList.add(albums);
                     }
-                    ArrayList<Album> artistSort = NewTunes.defaultSort(albumArrayList);
-                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(root.getContext(), artistSort);
+                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(root.getContext(), albumArrayList);
                     albumArrayAdapter.notifyDataSetChanged();
                     albumsListView.setAdapter(albumArrayAdapter);
                 }
@@ -86,18 +84,7 @@ public class DashboardFragment extends Fragment {
                         Album albums = document.toObject(Album.class);
                         albumArrayList.add(albums);
                     }
-                    ArrayList<Album> artistSort;
-                    if (sort == 0) //default
-                        artistSort = NewTunes.defaultSort(albumArrayList);
-                    else  if (sort == 1) //yearSort
-                        artistSort = NewTunes.yearSort(albumArrayList);
-                    else if (sort == 2) //style
-                        artistSort = NewTunes.styleSort(albumArrayList);
-                    else if (sort == 3)
-                       artistSort = NewTunes.albumSort(albumArrayList);
-                    else
-                        artistSort = NewTunes.defaultSort(albumArrayList);
-                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(root.getContext(), artistSort);
+                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(root.getContext(), albumArrayList);
                     albumArrayAdapter.notifyDataSetChanged();
                     albumsListView.setAdapter(albumArrayAdapter);
                 }
