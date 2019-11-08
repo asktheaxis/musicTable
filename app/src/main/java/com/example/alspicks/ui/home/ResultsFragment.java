@@ -1,5 +1,6 @@
 package com.example.alspicks.ui.home;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.alspicks.ActivityCallback;
 import com.example.alspicks.Album;
 import com.example.alspicks.R;
 import com.example.alspicks.RecyclerAlbumAdapter;
@@ -26,7 +28,29 @@ public class ResultsFragment extends Fragment {
     private ArrayList<Album> mArrayList = new ArrayList<>();
     SharedViewModel svModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
 
+    //Activity callback
+    private ActivityCallback mCallback;
 
+    //create instance of this fragment
+    public static ResultsFragment newInstance() {
+        return new ResultsFragment();
+    }
+
+
+
+
+    //override the onAttach and onDetach methods in fragment lifecycle
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallback = (ActivityCallback) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

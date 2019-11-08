@@ -1,7 +1,7 @@
 package com.example.alspicks.ui.home;
 
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.alspicks.ActivityCallback;
 import com.example.alspicks.Album;
 import com.example.alspicks.BuildConfig;
 import com.example.alspicks.R;
@@ -37,18 +38,39 @@ import java.util.Objects;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
-    //----copied from MainActivity----//
+
     private EditText edtArtist, edtAlbum;
     private ImageView imageView1, imageView2, imageView3;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private int artistId = 0;
     private ArrayList<Album> albumArrayList = new ArrayList<>();
-
+    //Activity callback
+    private ActivityCallback mCallback;
     private static final String TAG = "MainActivity";
 
-    //private GoogleSignInClient mGoogleSignInClient;
-    //private static final int RC_SIGN_IN = 9001;
-    //----copied from MainActivity----//
+
+
+
+    //create instance of this fragment
+    public static HomeFragment newInstance() {
+        return new HomeFragment();
+    }
+
+
+
+    //override the onAttach and onDetach methods in fragment lifecycle
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallback = (ActivityCallback) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -63,30 +85,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         imageView3 = root.findViewById(R.id.imageView5);
 
         //all our buttons should use the same on click, each has it's own case below
-        Button btnSave = root.findViewById(R.id.BtnSave);
+        Button btnSave = root.findViewById(R.id.BtnSearch);
         btnSave.setOnClickListener(this);
 
-        Button btnTunes = root.findViewById(R.id.BtnTunes);
-        btnTunes.setOnClickListener(this);
-        //^^^-copied from MainActivity-^^^//
 
         return root;
     }
 
 
-    //vvv-copied from MainActivity-vvv//
+
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.BtnSave) {
+        if (v.getId() == R.id.BtnSearch) {
             addAlbum();
+
         }
     }
 
-    private void openResultsFragment() {
-        Intent intent = new Intent(getActivity(), ResultsFragment.class);
-        startActivity(intent);
-    }
 
     private void addAlbum() {
 
@@ -201,7 +217,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                                     }
                                     Album albuml = new Album(artist, album, year, styles, genres, url);
                                     albumArrayList.add(albuml);
-                                    //svModel.setAlbumResults(albumArrayList); NEEDS TO BE ON CALLBACK
+                                    //svModel.setAlbumResults(albumArrayList);
                                 }
                             } catch (JSONException e){
                                 Log.w("Result was not an album", e);
@@ -210,10 +226,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     } catch (JSONException e) {
                         Log.w("Zero search results", e);
                     }
-                },
+                    mCallback.openResultsFragment();
+
+                    },
                 error -> Log.w("Error requesting Json data", error.toString())
         );
         requestQueue.add(objectRequest);
+
     }
 
     private void searchArtist(String searchType, String query){

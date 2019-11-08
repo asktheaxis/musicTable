@@ -2,8 +2,11 @@ package com.example.alspicks;
 
 public interface ActivityCallback {
 
-    //replace these with our actual fragments
-    void openChat();
-    void openCreateAccount();
-    void logout();
+    //prototypes are grouped  roughly by the app structure
+    void openResultsFragment();
+    void openHomeFragment();
+
+
+
+
 }

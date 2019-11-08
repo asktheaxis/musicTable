@@ -1,5 +1,6 @@
 package com.example.alspicks;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +11,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.alspicks.ui.account.AccountFragment;
+import com.example.alspicks.ui.home.HomeFragment;
+import com.example.alspicks.ui.home.ResultsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -23,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_darkTheme);
         setContentView(R.layout.activity_main);
+
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -32,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+
         SharedViewModel sharedViewModel = ViewModelProviders.of(requireNonNull(this)).get(SharedViewModel.class);
         //sharedViewModel.setUserId(requireNonNull(FirebaseAuth.getInstance().getCurrentUser()));
     }
@@ -40,15 +47,21 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
     //Callback Methods
 
     @Override
-    public void openChat(){
-
+    public void openResultsFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, ResultsFragment.newInstance())
+                .commit();
     }
+
 
     @Override
-    public void openCreateAccount() {
+    public void openHomeFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, HomeFragment.newInstance())
+                .commit();
     }
 
-    @Override
-    public void logout() {
-    }
+
 }
