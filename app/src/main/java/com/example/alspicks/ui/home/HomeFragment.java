@@ -222,11 +222,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                                 Log.w("Result was not an album", e);
                             }
                         }
-                        //Picasso.with(getContext()).load(urls.get(0)).fit().into(imageView1);
-                        //Picasso.with(getContext()).load(urls.get(1)).fit().into(imageView2);
-                        //Picasso.with(getContext()).load(urls.get(2)).fit().into(imageView3);
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.w("Zero search results", e);
                     }
                 },
                 error -> Log.w("Error requesting Json data", error.toString())
