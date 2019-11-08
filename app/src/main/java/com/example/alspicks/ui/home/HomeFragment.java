@@ -111,8 +111,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         final String userID = sharedViewModel.getUid();
         final String albumPath;
 
-        String searchType = null;
-        String query = null;
+        String searchType;
+        String query;
         if (!artistInput.equals("") && !albumInput.equals("")){
             searchType = "title";
             query = artistInput + " - " + albumInput;
