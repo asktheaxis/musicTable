@@ -1,8 +1,6 @@
 package com.example.alspicks.ui.home;
 
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -38,32 +35,20 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
     //----copied from MainActivity----//
     private EditText edtArtist, edtAlbum;
     private ImageView imageView1, imageView2, imageView3;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String finalYear, finalArtist, finalAlbum;
-    private ArrayList<String> albumStyles = new ArrayList<>();
     private int artistId = 0;
-    ArrayList<Album> albumArrayList = new ArrayList<>();
+    private ArrayList<Album> albumArrayList = new ArrayList<>();
 
     private static final String TAG = "MainActivity";
 
     //private GoogleSignInClient mGoogleSignInClient;
     //private static final int RC_SIGN_IN = 9001;
     //----copied from MainActivity----//
-     @SuppressLint("RestrictedApi")
-     private
-    Context context = getApplicationContext();
-
-    private CharSequence text = "Album added";
-    private int duration = Toast.LENGTH_SHORT;
-
-    private Toast albumAdded = Toast.makeText(context, text, duration);
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -246,10 +231,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         String albumsUrl = createArtistSearchURL(artistId);
                         searchAlbumByArtist(albumsUrl);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.w("No artist by that name", e);
                     }
                 },
-                error -> Log.w("Error requesting Artists by id", error.toString())
+                error -> Log.w("Error requesting Json data", error.toString())
         );
         requestQueue.add(objectRequest);
     }
@@ -275,10 +260,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         Picasso.with(getContext()).load(urls.get(1)).fit().into(imageView2);
                         Picasso.with(getContext()).load(urls.get(2)).fit().into(imageView3);
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.w("No albums found with that artistID", e);
                     }
                 },
-                error -> Log.w("Error requesting Albums by Artist", error.toString())
+                error -> Log.w("Error requesting Json data", error.toString())
         );
         requestQueue.add(objectRequest);
     }
