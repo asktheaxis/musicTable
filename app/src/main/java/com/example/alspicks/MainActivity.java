@@ -45,6 +45,21 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
 
 
     //Callback Methods
+    @Override
+    public void openDashboardFragment(){
+
+    }
+
+    @Override
+    public void openAccountFragment(){
+
+    }
+
+    @Override
+    public void openLoginFragment(){
+
+
+    }
 
     @Override
     public void openResultsFragment() {

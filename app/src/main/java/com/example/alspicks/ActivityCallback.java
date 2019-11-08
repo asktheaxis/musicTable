@@ -6,6 +6,11 @@ public interface ActivityCallback {
     void openResultsFragment();
     void openHomeFragment();
 
+    void openDashboardFragment();
+
+    void openAccountFragment();
+    void openLoginFragment();
+
 
 
 
