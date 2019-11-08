@@ -217,7 +217,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                                     }
                                     Album albuml = new Album(artist, album, year, styles, genres, url);
                                     albumArrayList.add(albuml);
-                                    //svModel.setAlbumResults(albumArrayList);
                                 }
                             } catch (JSONException e){
                                 Log.w("Result was not an album", e);
@@ -226,7 +225,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     } catch (JSONException e) {
                         Log.w("Zero search results", e);
                     }
-                    mCallback.openResultsFragment();
+                    mCallback.openResultsFragment(albumArrayList);
 
                     },
                 error -> Log.w("Error requesting Json data", error.toString())

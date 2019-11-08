@@ -20,13 +20,14 @@ import com.example.alspicks.RecyclerAlbumAdapter;
 import com.example.alspicks.SharedViewModel;
 
 import java.util.ArrayList;
-import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 public class ResultsFragment extends Fragment {
 
+    private RecyclerView recyclerView;
     private RecyclerAlbumAdapter mAdapter;
     private ArrayList<Album> mArrayList = new ArrayList<>();
-    SharedViewModel svModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
 
     //Activity callback
     private ActivityCallback mCallback;
@@ -55,8 +56,11 @@ public class ResultsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
+        SharedViewModel svModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
+        mArrayList = svModel.getAlbumResults();
         View rootView = inflater.inflate(R.layout.fragment_results, container, false);
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerView = rootView.findViewById(R.id.recyclerView);
         mAdapter = new RecyclerAlbumAdapter(mArrayList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -65,7 +69,15 @@ public class ResultsFragment extends Fragment {
 
         mArrayList = svModel.getAlbumResults();
         mAdapter.notifyDataSetChanged();
+        /*RecyclerView.LayoutManager mlayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mlayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter = new RecyclerAlbumAdapter(mArrayList);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
+        mArrayList = svModel.getAlbumResults();
+        mAdapter.notifyDataSetChanged();*/
         return rootView;
     }
 }
