@@ -9,6 +9,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.alspicks.ui.account.AccountFragment;
+import com.example.alspicks.ui.dashboard.DashboardFragment;
 import com.example.alspicks.ui.home.HomeFragment;
 import com.example.alspicks.ui.home.ResultsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -28,17 +30,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
         setTheme(R.style.Theme_darkTheme);
         setContentView(R.layout.activity_main);
 
-
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications, R.id.navigation_account)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
-
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.container, HomeFragment.newInstance())
+                .commit();
 
         sharedViewModel = ViewModelProviders.of(requireNonNull(this)).get(SharedViewModel.class);
         //sharedViewModel.setUserId(requireNonNull(FirebaseAuth.getInstance().getCurrentUser()));
@@ -48,12 +43,18 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
     //Callback Methods
     @Override
     public void openDashboardFragment(){
-
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, DashboardFragment.newInstance())
+                .commit();
     }
 
     @Override
     public void openAccountFragment(){
-
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, AccountFragment.newInstance())
+                .commit();
     }
 
     @Override
