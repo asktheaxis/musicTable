@@ -1,5 +1,6 @@
 package com.example.alspicks;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdapter.MyViewHolder> {
 
-    private ArrayList<Album> albumArrayList = new ArrayList<>();
+    private ArrayList<Album> albumArrayList;
+    private Context context;
 
     public RecyclerAlbumAdapter(ArrayList<Album> albums){
         this.albumArrayList = albums;
@@ -42,6 +46,7 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
+
         Album album = albumArrayList.get(position);
         holder.artist.setText(album.getArtist());
         holder.album.setText(album.getName());
@@ -50,6 +55,7 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
             holder.style.append(album.style.get(i));
             holder.style.append(", ");
         }
+        Picasso.with(holder.albumArt.getContext()).load(album.coverImage).into(holder.albumArt);
     }
 
     @Override

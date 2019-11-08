@@ -1,6 +1,5 @@
 package com.example.alspicks;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,16 +9,18 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.alspicks.ui.account.AccountFragment;
 import com.example.alspicks.ui.home.HomeFragment;
 import com.example.alspicks.ui.home.ResultsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 import static java.util.Objects.requireNonNull;
 
 
 public class MainActivity extends AppCompatActivity implements ActivityCallback{
+
+    private SharedViewModel sharedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
         NavigationUI.setupWithNavController(navView, navController);
 
 
-        SharedViewModel sharedViewModel = ViewModelProviders.of(requireNonNull(this)).get(SharedViewModel.class);
+        sharedViewModel = ViewModelProviders.of(requireNonNull(this)).get(SharedViewModel.class);
         //sharedViewModel.setUserId(requireNonNull(FirebaseAuth.getInstance().getCurrentUser()));
     }
 
@@ -62,7 +63,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
     }
 
     @Override
-    public void openResultsFragment() {
+    public void openResultsFragment(ArrayList<Album> results) {
+
+        sharedViewModel.setAlbumResults(results);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, ResultsFragment.newInstance())
