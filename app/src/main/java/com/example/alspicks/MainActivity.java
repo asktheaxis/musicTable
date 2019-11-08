@@ -9,13 +9,14 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.alspicks.ui.account.AccountFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import static java.util.Objects.requireNonNull;
 
 
-public class MainActivity extends AppCompatActivity /*implements AccountFragment.AccountFragmentListener*/{
+public class MainActivity extends AppCompatActivity implements ActivityCallback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,5 +34,21 @@ public class MainActivity extends AppCompatActivity /*implements AccountFragment
         NavigationUI.setupWithNavController(navView, navController);
         SharedViewModel sharedViewModel = ViewModelProviders.of(requireNonNull(this)).get(SharedViewModel.class);
         //sharedViewModel.setUserId(requireNonNull(FirebaseAuth.getInstance().getCurrentUser()));
+    }
+
+
+    //Callback Methods
+
+    @Override
+    public void openChat(){
+
+    }
+
+    @Override
+    public void openCreateAccount() {
+    }
+
+    @Override
+    public void logout() {
     }
 }
