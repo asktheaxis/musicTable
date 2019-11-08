@@ -14,6 +14,7 @@ import com.example.alspicks.ui.dashboard.DashboardFragment;
 import com.example.alspicks.ui.home.HomeFragment;
 import com.example.alspicks.ui.home.ResultsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -30,10 +31,22 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
         setTheme(R.style.Theme_darkTheme);
         setContentView(R.layout.activity_main);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.container, HomeFragment.newInstance())
-                .commit();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container, HomeFragment.newInstance())
+                    .commit();
+        }
+        else{
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container, AccountFragment.newInstance())
+                    .commit();
+
+        }
+
+
+
 
         sharedViewModel = ViewModelProviders.of(requireNonNull(this)).get(SharedViewModel.class);
         //sharedViewModel.setUserId(requireNonNull(FirebaseAuth.getInstance().getCurrentUser()));
