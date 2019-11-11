@@ -37,6 +37,20 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
         }
     }
 
+    class ResultsViewHolder extends RecyclerView.ViewHolder {
+        TextView album, artist, year;
+        ImageButton albumArt;
+
+        ResultsViewHolder(View itemView) {
+            super(itemView);
+            album = itemView.findViewById(R.id.tvAlbum);
+            artist = itemView.findViewById(R.id.tvArtist);
+            year = itemView.findViewById(R.id.tvYear);
+            albumArt = itemView.findViewById(R.id.albumButton);
+        }
+    }
+
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
