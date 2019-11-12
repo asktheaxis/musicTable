@@ -21,6 +21,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.alspicks.ActivityCallback;
 import com.example.alspicks.Album;
+import com.example.alspicks.AlbumDialog;
+import com.example.alspicks.ArtistDialog;
 import com.example.alspicks.BuildConfig;
 import com.example.alspicks.R;
 import com.example.alspicks.SharedViewModel;
@@ -223,7 +225,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                             }
                         }
                     } catch (JSONException e) {
-                        Log.w("Zero search results", e);
+                        openAlbumDialog();
                     }
                     mCallback.openResultsFragment(albumArrayList);
 
@@ -249,7 +251,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         String albumsUrl = createArtistSearchURL(artistId);
                         searchAlbumByArtist(albumsUrl);
                     } catch (Exception e) {
-                        Log.w("No artist by that name", e);
+                        openArtistDialog();
                     }
                 },
                 error -> Log.w("Error requesting Json data", error.toString())
@@ -284,5 +286,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 error -> Log.w("Error requesting Json data", error.toString())
         );
         requestQueue.add(objectRequest);
+    }
+
+    public void openArtistDialog() {
+        ArtistDialog artistDialog = new ArtistDialog();
+        artistDialog.show(getFragmentManager(), "No Artists");
+    }
+
+    public void openAlbumDialog() {
+        AlbumDialog albumDialog = new AlbumDialog();
+        albumDialog.show(getFragmentManager(), "No Results");
     }
 }
