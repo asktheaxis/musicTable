@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 public class SharedViewModel extends ViewModel {
     String uid = "";
@@ -19,6 +20,7 @@ public class SharedViewModel extends ViewModel {
     String userName;
     private static final String TAG = "MainActivity";
     private String albumNameEncoded;
+    public ArrayList<Album> albumResults = new ArrayList<>();
 
     /*public SharedViewModel(MutableLiveData<String> userName) {
         this.userName = userName;
@@ -42,6 +44,14 @@ public class SharedViewModel extends ViewModel {
 
     public void clearUserId(){
         uid = "";
+    }
+
+    public void setAlbumResults(ArrayList<Album> results){
+        albumResults = results;
+    }
+
+    public ArrayList<Album> getAlbumResults() {
+        return albumResults;
     }
 
     public void signOut(){

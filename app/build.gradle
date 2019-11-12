@@ -72,5 +72,7 @@ dependencies {
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
+
 }
 apply plugin: 'com.google.gms.google-services'

@@ -1,5 +1,6 @@
 package com.example.alspicks.ui.dashboard;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.alspicks.ActivityCallback;
 import com.example.alspicks.Album;
 import com.example.alspicks.AlbumArrayAdapter;
-import com.example.alspicks.NewTunes;
 import com.example.alspicks.R;
 import com.example.alspicks.SharedViewModel;
+import com.example.alspicks.ui.home.HomeFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -27,9 +29,27 @@ public class DashboardFragment extends Fragment {
     private ListView albumsListView;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private View root;
+    private ActivityCallback mCallback;
+
+    //create instance of this fragment
+    public static DashboardFragment newInstance() {
+        return new DashboardFragment();
+    }
 
 
 
+    //override the onAttach and onDetach methods in fragment lifecycle
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallback = (ActivityCallback) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -65,8 +85,7 @@ public class DashboardFragment extends Fragment {
                         Album albums = document.toObject(Album.class);
                         albumArrayList.add(albums);
                     }
-                    ArrayList<Album> artistSort = NewTunes.defaultSort(albumArrayList);
-                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(root.getContext(), artistSort);
+                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(root.getContext(), albumArrayList);
                     albumArrayAdapter.notifyDataSetChanged();
                     albumsListView.setAdapter(albumArrayAdapter);
                 }
@@ -86,18 +105,7 @@ public class DashboardFragment extends Fragment {
                         Album albums = document.toObject(Album.class);
                         albumArrayList.add(albums);
                     }
-                    ArrayList<Album> artistSort;
-                    if (sort == 0) //default
-                        artistSort = NewTunes.defaultSort(albumArrayList);
-                    else  if (sort == 1) //yearSort
-                        artistSort = NewTunes.yearSort(albumArrayList);
-                    else if (sort == 2) //style
-                        artistSort = NewTunes.styleSort(albumArrayList);
-                    else if (sort == 3)
-                       artistSort = NewTunes.albumSort(albumArrayList);
-                    else
-                        artistSort = NewTunes.defaultSort(albumArrayList);
-                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(root.getContext(), artistSort);
+                    AlbumArrayAdapter albumArrayAdapter = new AlbumArrayAdapter(root.getContext(), albumArrayList);
                     albumArrayAdapter.notifyDataSetChanged();
                     albumsListView.setAdapter(albumArrayAdapter);
                 }
