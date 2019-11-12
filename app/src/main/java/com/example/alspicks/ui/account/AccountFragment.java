@@ -1,6 +1,7 @@
 package com.example.alspicks.ui.account;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.alspicks.ActivityCallback;
 import com.example.alspicks.R;
 import com.example.alspicks.SharedViewModel;
 import com.firebase.ui.auth.AuthUI;
@@ -29,12 +31,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,11 +50,34 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private TextView userTextView;
     FirebaseUser user;
 
+
+    private ActivityCallback mCallback;
+
+    //create instance of this fragment
+    public static AccountFragment newInstance() { return new AccountFragment();
+    }
+
+
+
+    //override the onAttach and onDetach methods in fragment lifecycle
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallback = (ActivityCallback) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         accountViewModel = ViewModelProviders.of(this).get(AccountViewModel.class);

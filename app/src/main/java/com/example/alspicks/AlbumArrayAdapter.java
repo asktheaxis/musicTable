@@ -29,7 +29,10 @@ public class AlbumArrayAdapter extends ArrayAdapter<Album> {
         name.setText(album.getName());
         artist.setText(album.getArtist());
         year.setText(album.getYear());
-        style.setText(album.getStyle());
+        for (int i = 0; i < album.style.size(); i++) {
+            style.append(album.style.get(i));
+            style.append(", ");
+        }
 
         return convertView;
     }

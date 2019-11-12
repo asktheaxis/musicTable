@@ -57,63 +57,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtArtist" />
 
-    <EditText
-        android:id="@+id/edtYear"
-        style="?textBoxes"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:layout_marginLeft="17dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="17dp"
-        android:layout_marginRight="17dp"
-        android:fontFamily="serif"
-        android:hint="Year"
-        android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtAlbum" />
-
-    <Spinner
-        android:id="@+id/edtStyle"
-        style="?textBoxes"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="17dp"
-        android:entries="@array/genre_array"
-        android:fontFamily="serif"
-        android:hint="Style/Genre"
-        android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtYear" />
-
     <Button
-        android:id="@+id/BtnSave"
+        android:id="@+id/BtnSearch"
         style="?button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
         android:fontFamily="serif"
         android:onClick="AddEmployee"
-        android:text="Add Album"
-        app:layout_constraintEnd_toStartOf="@+id/BtnTunes"
-        app:layout_constraintHorizontal_bias="0.094"
+        android:text="Search"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtStyle" />
-
-    <Button
-        android:id="@+id/BtnTunes"
-        style="?button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="serif"
-        android:onClick="newTunes"
-        android:text="New Tunes"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtStyle" />
+        app:layout_constraintTop_toBottomOf="@+id/edtAlbum" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -124,7 +78,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.062"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BtnSave"
+        app:layout_constraintTop_toBottomOf="@+id/BtnSearch"
         app:srcCompat="@android:color/transparent" />
 
     <ImageView
@@ -132,22 +86,19 @@
         android:layout_width="98dp"
         android:layout_height="87dp"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginBottom="336dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toBottomOf="@+id/edtStyle"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@android:color/transparent" />
 
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="95dp"
         android:layout_height="84dp"
-        android:layout_marginTop="36dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.548"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/BtnTunes"
-        app:srcCompat="@android:color/transparent" />
+        app:srcCompat="@android:color/transparent"
+        tools:layout_editor_absoluteY="305dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
