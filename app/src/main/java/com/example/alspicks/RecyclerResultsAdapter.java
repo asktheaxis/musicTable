@@ -1,5 +1,6 @@
 package com.example.alspicks;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.alspicks.ui.home.ResultsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,7 +43,6 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
         }
     }
 
-
     @NonNull
     @Override
     public ResultsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -62,7 +63,7 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
         holder.albumArt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddItemDialog(context);
+                showAddItemDialog(holder.albumArt.getContext());
             }
         });
     }
@@ -94,5 +95,8 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
                 .create();
         dialog.show();
     }
+
+
+
 
 }
