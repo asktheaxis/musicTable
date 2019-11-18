@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +17,21 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.alspicks.ui.home.ResultsFragment;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResultsAdapter.ResultsViewHolder> {
 
+    private SharedViewModel sharedViewModel;
     private ArrayList<Album> albumArrayList;
     private Context context;
     private String m_text = "";
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static final String TAG = "MainActivity";
 
     public RecyclerResultsAdapter(ArrayList<Album> albums) {
         this.albumArrayList = albums;
@@ -89,6 +96,31 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String task = String.valueOf(taskEditText.getText());
+
+
+                        final Map<String, Object> album = new HashMap<>();
+                        album.put("artist", albumArtist);
+                        album.put("name", albumName);
+                        album.put("year", albumYear);
+                        album.put("style", albumStyle);
+                        album.put("origUser", sharedViewModel.getUid());
+                        album.put("receiver", task);
+
+
+
+                        // Add a new document with a generated ID
+
+            db.collection("albums")
+                    .document(albumName)
+                    .set(album)
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        //albumAdded.show();
+                    })
+                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+
+
+
                     }
                 })
                 .setNegativeButton("Cancel", null)
