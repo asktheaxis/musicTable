@@ -1,276 +1,300 @@
 package com.example.alspicks.ui.home;
 
 
-import android.app.Activity;
-import android.content.Intent;
-import android.util.Log;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.ImageView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.alspicks.NewTunes;
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.alspicks.ActivityCallback;
+import com.example.alspicks.Album;
+import com.example.alspicks.AlbumDialog;
+import com.example.alspicks.ArtistDialog;
+import com.example.alspicks.BuildConfig;
 import com.example.alspicks.R;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.example.alspicks.SharedViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
-    private HomeViewModel homeViewModel;
 
-    //----copied from MainActivity----//
-    private EditText edtArtist, edtAlbum, edtYear, edtStyle;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private EditText edtArtist, edtAlbum;
+    private ImageView imageView1, imageView2, imageView3;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private int artistId = 0;
+    private ArrayList<Album> albumArrayList = new ArrayList<>();
+    //Activity callback
+    private ActivityCallback mCallback;
     private static final String TAG = "MainActivity";
-    private ListView albumsListView;
 
-    private GoogleSignInClient mGoogleSignInClient;
-    private static final int RC_SIGN_IN = 9001;
-    //----copied from MainActivity----//
 
+
+
+    //create instance of this fragment
+    public static HomeFragment newInstance() {
+        return new HomeFragment();
+    }
+
+
+
+    //override the onAttach and onDetach methods in fragment lifecycle
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallback = (ActivityCallback) context;
+    }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //----copied from MainActivity----//
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
-        //----copied from MainActivity----//
-
-
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
     }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-
-        //vvv-copied from MainActivity-vvv//
         edtArtist = root.findViewById(R.id.edtArtist);
         edtAlbum = root.findViewById(R.id.edtAlbum);
-        edtYear = root.findViewById(R.id.edtYear);
-        edtStyle = root.findViewById(R.id.edtStyle);
 
+        //for testing
+        imageView1 = root.findViewById(R.id.imageView3);
+        imageView2 = root.findViewById(R.id.imageView4);
+        imageView3 = root.findViewById(R.id.imageView5);
 
         //all our buttons should use the same on click, each has it's own case below
-        Button btnSave = root.findViewById(R.id.BtnSave);
+        Button btnSave = root.findViewById(R.id.BtnSearch);
         btnSave.setOnClickListener(this);
 
-        Button btnTunes = root.findViewById(R.id.BtnTunes);
-        btnTunes.setOnClickListener(this);
-
-        SignInButton btnGoogleSignIn = root.findViewById(R.id.sign_in_button);
-        btnGoogleSignIn.setOnClickListener(this);
-
-        Button btnSignOut = root.findViewById(R.id.btnSignOut);
-        btnSignOut.setOnClickListener(this);
-
-
-
-        //^^^-copied from MainActivity-^^^//
 
         return root;
     }
 
 
-    //vvv-copied from MainActivity-vvv//
+
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        if (v.getId() == R.id.BtnSearch) {
+            addAlbum();
 
-            case R.id.btnSignOut: //each button gets a case
-                signOut();
-                break;
-
-            case R.id.BtnSave:
-                addAlbum();
-                break;
-
-            case R.id.BtnTunes:
-                openNewTunes();
-                break;
-
-            case R.id.sign_in_button:
-                createSignInIntent();
-                break;
-
-            default:
-                break;
         }
     }
-
-
-    public void createSignInIntent() {
-        // [START auth_fui_create_intent]
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                //new AuthUI.IdpConfig.PhoneBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
-
-        // Create and launch sign-in intent
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
-        // [END auth_fui_create_intent]
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-
-            if (resultCode == Activity.RESULT_OK) {
-                // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null) customUser(user);
-                // ...
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
-            }
-        }
-    }
-    // [END auth_fui_result]
-
-    public void customUser(FirebaseUser user){
-
-        Map<String, Object> newUser = new HashMap<>();
-        newUser.put("Name", user.getEmail());
-        newUser.put("UID", user.getUid());
-        newUser.put("Music", Collections.emptyList());
-        db.collection("Users").add(newUser)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-
-                    }
-                });
-    }
-
-    public void signOut() {
-        // [START auth_fui_signout]
-        AuthUI.getInstance()
-                .signOut(getActivity())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
-                    }
-                });
-        // [END auth_fui_signout]
-    }
-
-    public void delete() {
-        // [START auth_fui_delete]
-        AuthUI.getInstance()
-                .delete(getActivity())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
-                    }
-                });
-        // [END auth_fui_delete]
-    }
-
-    //we can probably relocate new tunes to one of the open fragments instead of another activity
-    public void openNewTunes() {
-        Intent intent = new Intent(getActivity(), NewTunes.class);
-        startActivity(intent);
-    }
-
 
 
     private void addAlbum() {
 
-        final String albumArtist = edtArtist.getText().toString();
+        SharedViewModel sharedViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
+        final String artistInput = edtArtist.getText().toString();
+        final String albumInput = edtAlbum.getText().toString();
+        final String userID = sharedViewModel.getUid();
+        final String albumPath;
 
-        final String albumName = edtAlbum.getText().toString();
-        final String albumYear = edtYear.getText().toString();
-        final String albumStyle = edtStyle.getText().toString();
-
-        // return if input fields are empty
-        if (albumArtist.equals("") && albumName.equals("") && albumYear.equals("") && albumStyle.equals("")){
-            return;
+        String searchType;
+        String query;
+        if (!artistInput.equals("") && !albumInput.equals("")){
+            searchType = "title";
+            query = artistInput + " - " + albumInput;
+            searchAlbums(searchType, query);
+        } else if (artistInput.equals("") && !albumInput.equals("")) {
+            searchType = "album";
+            query = albumInput;
+            searchAlbums(searchType, query);
+        } else {
+            searchType = "artist";
+            query = artistInput;
+            searchArtist(searchType, query);
         }
 
-        // Create a new album with Artist, Album, Year, and Genre
+        /*// Create a new album with Artist, Album, Year, and Genre
         final Map<String, Object> album = new HashMap<>();
         album.put("artist", albumArtist);
         album.put("name", albumName);
         album.put("year", albumYear);
         album.put("style", albumStyle);
+        album.put("origUser", sharedViewModel.getUid());*/
+
 
         // Add a new document with a generated ID
-        db.collection("albums")
-                .add(album)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
+        /*if(!userID.equals("")){
+            db.collection("albums")
+                    .document(albumName)
+                    .set(album)
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        albumAdded.show();
+                    })
+                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
-                    }
-                });
+        }*/
 
     }
 
+    private String createSearchURL(String search, String query){
+        String searchEncoded = null;
+        String queryEncoded = null;
+        try {
+            searchEncoded = URLEncoder.encode(search, "UTF-8");
+            queryEncoded = URLEncoder.encode(query, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.w(TAG, "Error encoding URL", e);
+        }
+        String url = "https://api.discogs.com/database/search?type=" + searchEncoded + "&q=" + queryEncoded + "&key=" + BuildConfig.CONSUMER_KEY + "&secret=" + BuildConfig.CONSUMER_SECRET;
+        return url;
+    }
+
+    private String createArtistSearchURL(int id) throws Exception {
+        if (id < 0){
+            throw new Exception("artist id must be greater than zero!");
+        } else {
+            String artistId = Integer.toString(id);
+            String idEncoded = null;
+            try {
+                idEncoded = URLEncoder.encode(artistId, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                Log.w(TAG, "Error encoding URL", e);
+            }
+            String url = "https://api.discogs.com/artists/" + idEncoded + "/releases?sort=year&sort_order=asc&key=" + BuildConfig.CONSUMER_KEY + "&secret=" + BuildConfig.CONSUMER_SECRET;
+            return url;
+        }
+    }
+
+    private void searchAlbums(String searchType, String query){
+        RequestQueue requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                createSearchURL(searchType, query),
+                null,
+                response -> {
+                    //Convert Json to Album Object to add to DB
+                    Log.w("Rest Response", response.toString());
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("results");
+                        SharedViewModel svModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
+                        for (int i = 0; i < 50; i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            try {
+                                if (!jsonObject.getString("title").isEmpty() && !jsonObject.getString("year").isEmpty()
+                                        && !jsonObject.getString("cover_image").isEmpty() && !jsonObject.getJSONArray("style").isNull(0)
+                                        && !jsonObject.getJSONArray("genre").isNull(0)) {
+                                    Log.w("Discogs Album result ", jsonObject.toString());
+                                    String artist, album, year, title, url;
+                                    ArrayList<String> styles = new ArrayList<>();
+                                    ArrayList<String> genres = new ArrayList<>();
+                                    url = jsonObject.getString("cover_image");
+                                    title = jsonObject.getString("title");
+                                    String[] parseString = title.split(" - ", 2);
+                                    artist = parseString[0];
+                                    album = parseString[1];
+                                    year = jsonObject.getString("year");
+                                    for (int j = 0; j < jsonObject.getJSONArray("style").length(); j++){
+                                        styles.add(jsonObject.getJSONArray("style").getString(j));
+                                    }
+                                    for (int k = 0; k < jsonObject.getJSONArray("genre").length(); k++){
+                                        genres.add(jsonObject.getJSONArray("genre").getString(k));
+                                    }
+                                    Album albuml = new Album(artist, album, year, styles, genres, url);
+                                    albumArrayList.add(albuml);
+                                }
+                            } catch (JSONException e){
+                                Log.w("Result was not an album", e);
+                            }
+                        }
+                    } catch (JSONException e) {
+                        openAlbumDialog();
+                    }
+                    mCallback.openResultsFragment(albumArrayList);
+
+                    },
+                error -> Log.w("Error requesting Json data", error.toString())
+        );
+        requestQueue.add(objectRequest);
+
+    }
+
+    private void searchArtist(String searchType, String query){
+        RequestQueue requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                createSearchURL(searchType, query),
+                null,
+                response -> {
+                    Log.w("Searching Artists...looking for id: ", response.toString());
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("results");
+                        JSONObject overallResultsObject = jsonArray.getJSONObject(0);
+                        artistId = overallResultsObject.getInt("id");
+                        String albumsUrl = createArtistSearchURL(artistId);
+                        searchAlbumByArtist(albumsUrl);
+                    } catch (Exception e) {
+                        openArtistDialog();
+                    }
+                },
+                error -> Log.w("Error requesting Json data", error.toString())
+        );
+        requestQueue.add(objectRequest);
+    }
+
+    private void searchAlbumByArtist(String url){
+        RequestQueue requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> {
+                    //Convert Json to Album Object to add to DB
+                    Log.w("Searching Albums by Artist w/ id ", response.toString());
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("releases");
+                        ArrayList<String> urls = new ArrayList<>();
+                        for (int i = 0; i < 4; i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String url1 = jsonObject.getString("thumb");
+                            urls.add(url1);
+                        }
+                        Picasso.with(getContext()).load(urls.get(0)).fit().into(imageView1);
+                        Picasso.with(getContext()).load(urls.get(1)).fit().into(imageView2);
+                        Picasso.with(getContext()).load(urls.get(2)).fit().into(imageView3);
+                    } catch (JSONException e) {
+                        Log.w("No albums found with that artistID", e);
+                    }
+                },
+                error -> Log.w("Error requesting Json data", error.toString())
+        );
+        requestQueue.add(objectRequest);
+    }
+
+    public void openArtistDialog() {
+        ArtistDialog artistDialog = new ArtistDialog();
+        artistDialog.show(getFragmentManager(), "No Artists");
+    }
+
+    public void openAlbumDialog() {
+        AlbumDialog albumDialog = new AlbumDialog();
+        albumDialog.show(getFragmentManager(), "No Results");
+    }
 }

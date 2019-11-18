@@ -5,10 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    style="?pageBackground">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,7 +18,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000"
+                style="?textRegular"
                 android:textSize="20sp"
                 android:fontFamily="serif"
                 android:text="New Tunes"
@@ -35,8 +32,7 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/header_artist"
@@ -44,8 +40,11 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="serif"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:onClick="artistClick"
                         android:text="Artist"
-                        android:textColor="#000" />
+                        style="?textRegular" />
 
                     <TextView
                         android:id="@+id/header_album"
@@ -53,8 +52,11 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="serif"
+                        android:gravity="center"
+                        android:clickable="true"
+
                         android:text="Album"
-                        android:textColor="#000" />
+                        style="?textRegular" />
 
                     <TextView
                         android:id="@+id/header_year"
@@ -62,8 +64,11 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="serif"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:onClick="yearClick"
                         android:text="Year"
-                        android:textColor="#000" />
+                        style="?textRegular" />
 
                     <TextView
                         android:id="@+id/header_style"
@@ -71,27 +76,33 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="serif"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:onClick="styleClick"
                         android:text="Style"
-                        android:textColor="#000" />
+                        style="?textRegular" />
 
                 </TableRow>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="3dip"
-                    android:background="#ff0000" />
+                    style="?accentLine" />
             </TableLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <ListView
                 android:id="@+id/records_view"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
                 android:layout_marginTop="16dp"
-
+                android:layout_centerInParent="true"
                 android:layout_marginLeft="10dp">
 
             </ListView>
-
+        </RelativeLayout>
 
             <Button
                 android:id="@+id/BtnMain"
@@ -102,5 +113,5 @@
                 android:onClick="openMain"
                 android:text="Back" />
         </LinearLayout>
-    </ScrollView>
 </LinearLayout>
+

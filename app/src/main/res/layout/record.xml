@@ -1,37 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    style="?pageBackground">
     <TextView
         android:id="@+id/record_artist"
         android:fontFamily="serif"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:textColor="#000"
-        android:text="Artist"/>
+        android:paddingRight="2dp"
+        style="?textRegular"
+        android:text="@string/Artist"/>
     <TextView
         android:id="@+id/record_album"
-        android:textColor="#000"
+        style="?textRegular"
         android:fontFamily="serif"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:text="Album"/>
+        android:paddingLeft="15dp"
+        android:minWidth="20dp"
+        android:text="@string/Album"/>
     <TextView
-        android:textColor="#000"
+        style="?textRegular"
         android:id="@+id/record_year"
         android:fontFamily="serif"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:text="Year"/>
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:maxWidth="10dp"
+        android:text="@string/Year"/>
     <TextView
-        android:textColor="#000"
+        style="?textRegular"
         android:id="@+id/record_style"
         android:fontFamily="serif"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:text="Style"/>
+        android:gravity="center"
+        android:text="@string/Style"/>
 </LinearLayout>
