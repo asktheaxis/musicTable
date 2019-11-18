@@ -62,43 +62,14 @@
         style="?button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="serif"
         android:onClick="AddEmployee"
         android:text="Search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtAlbum" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="99dp"
-        android:layout_height="86dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="36dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.062"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BtnSearch"
-        app:srcCompat="@android:color/transparent" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="98dp"
-        android:layout_height="87dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginBottom="336dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:srcCompat="@android:color/transparent" />
-
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="95dp"
-        android:layout_height="84dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.548"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:srcCompat="@android:color/transparent"
-        tools:layout_editor_absoluteY="305dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
