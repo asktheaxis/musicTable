@@ -1,6 +1,9 @@
 package com.example.alspicks;
 
 import android.os.Bundle;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -24,11 +27,26 @@ import static java.util.Objects.requireNonNull;
 public class MainActivity extends AppCompatActivity implements ActivityCallback{
 
     private SharedViewModel sharedViewModel;
+    private Switch switcher = findViewById(R.id.themeSwitch);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.Theme_darkTheme);
+        try {switcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked)
+                        setTheme(R.style.Theme_darkTheme);
+                    else
+                        setTheme(R.style.Theme_light);
+                }
+            });
+        } catch(java.lang.NullPointerException e) {
+            Toast testToast = Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT);
+            testToast.show();
+        }
+
         setContentView(R.layout.activity_main);
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {

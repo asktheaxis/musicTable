@@ -113,9 +113,8 @@ public class Album implements Collection<Album>{
 
     }
 
-    /*
-    our sort methods for later use?
-    public static ArrayList<Album> defaultSort(ArrayList<Album> albumArrayList){
+
+/*    public static ArrayList<Album> defaultSort(ArrayList<Album> albumArrayList){
         return (ArrayList<Album>) albumArrayList.stream().sorted(Comparator.comparing(Album::getArtist)).collect(Collectors.toList());
     }
 
@@ -129,6 +128,6 @@ public class Album implements Collection<Album>{
 
     public static ArrayList<Album> albumSort(ArrayList<Album> albumArrayList) {
         return (ArrayList<Album>) albumArrayList.stream().sorted(Comparator.comparing(Album::getName)).collect(Collectors.toList());
-    }
-     */
+    }*/
+
 }
