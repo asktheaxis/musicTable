@@ -70,7 +70,7 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
         holder.albumArt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddItemDialog(holder.albumArt.getContext());
+                showAddItemDialog(holder.albumArt.getContext(), album);
             }
         });
     }
@@ -86,7 +86,7 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
     }
 
 
-    private void showAddItemDialog(Context c) {
+    private void showAddItemDialog(Context c, Album a) {
         final EditText taskEditText = new EditText(c);
         AlertDialog dialog = new AlertDialog.Builder(c)
                 .setTitle("Send a Recommendation")
@@ -99,10 +99,10 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
 
 
                         final Map<String, Object> album = new HashMap<>();
-                        album.put("artist", albumArtist);
-                        album.put("name", albumName);
-                        album.put("year", albumYear);
-                        album.put("style", albumStyle);
+                        album.put("artist", a.artist);
+                        album.put("name", a.name);
+                        album.put("year", a.year);
+                        album.put("style", a.style);
                         album.put("origUser", sharedViewModel.getUid());
                         album.put("receiver", task);
 
@@ -111,7 +111,7 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
                         // Add a new document with a generated ID
 
             db.collection("albums")
-                    .document(albumName)
+                    .document(a.name)
                     .set(album)
                     .addOnSuccessListener(documentReference -> {
                         Log.d(TAG, "DocumentSnapshot successfully written!");

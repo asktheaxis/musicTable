@@ -87,6 +87,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         //all our buttons should use the same on click, each has it's own case below
         Button btnSave = root.findViewById(R.id.BtnSearch);
         btnSave.setOnClickListener(this);
+        Button btnAccount = root.findViewById(R.id.btnAccount);
+        btnAccount.setOnClickListener(this);
 
 
         return root;
@@ -99,7 +101,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         if (v.getId() == R.id.BtnSearch) {
             addAlbum();
-
+        if (v.getId() == R.id.btnAccount){
+            mCallback.openAccountFragment();
+        }
         }
     }
 
