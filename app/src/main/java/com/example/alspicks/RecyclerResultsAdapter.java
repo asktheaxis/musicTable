@@ -17,6 +17,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.alspicks.ui.home.ResultsFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
@@ -32,6 +34,8 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
     private String m_text = "";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "MainActivity";
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private ActivityCallback mCallback;
 
     public RecyclerResultsAdapter(ArrayList<Album> albums) {
         this.albumArrayList = albums;
@@ -70,7 +74,8 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
         holder.albumArt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddItemDialog(holder.albumArt.getContext(), album);
+                if (FirebaseAuth.getInstance().getCurrentUser() == null){showLogInDialog(holder.albumArt.getContext());}
+                else{showAddItemDialog(holder.albumArt.getContext(), album);}
             }
         });
     }
@@ -85,7 +90,22 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
         return position;
     }
 
+    private void showLogInDialog(Context c){
+        AlertDialog dialog = new AlertDialog.Builder(c)
+                .setTitle("Please Log In")
+                .setPositiveButton("Log In", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mCallback.openAccountFragment();
 
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
+
+
+    }
     private void showAddItemDialog(Context c, Album a) {
         final EditText taskEditText = new EditText(c);
         AlertDialog dialog = new AlertDialog.Builder(c)
@@ -103,7 +123,8 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
                         album.put("name", a.name);
                         album.put("year", a.year);
                         album.put("style", a.style);
-                        album.put("origUser", sharedViewModel.getUid());
+
+                        album.put("sender", user.getUid());
                         album.put("receiver", task);
 
 
