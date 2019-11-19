@@ -196,7 +196,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     Log.w("Rest Response", response.toString());
                     try {
                         JSONArray jsonArray = response.getJSONArray("results");
-                        SharedViewModel svModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
                         for (int i = 0; i < 50; i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             try {
@@ -277,7 +276,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     Log.w("Searching Albums by Artist w/ id ", response.toString());
                     try {
                         JSONArray jsonArray = response.getJSONArray("releases");
-                        ArrayList<String> urls = new ArrayList<>();
                         for (int i = 0; i < 100; i++) {
                             String urll, artist, album, year;
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
