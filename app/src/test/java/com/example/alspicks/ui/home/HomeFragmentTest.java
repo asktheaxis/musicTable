@@ -1,18 +1,8 @@
 package com.example.alspicks.ui.home;
 
-import android.util.Log;
-
-import org.junit.Assert;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-
-
 class HomeFragmentTest extends HomeFragment {
 
+    /*
     @Test
     void createArtistSearchURLTest() throws Exception {
         try {
@@ -45,7 +35,7 @@ class HomeFragmentTest extends HomeFragment {
                 break;
             }
         }
-    }
+    }*/
 
 
 }

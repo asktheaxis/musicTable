@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.alspicks.ActivityCallback;
 import com.example.alspicks.Album;
 import com.example.alspicks.R;
-import com.example.alspicks.RecyclerAlbumAdapter;
+import com.example.alspicks.RecyclerResultsAdapter;
 import com.example.alspicks.SharedViewModel;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import static java.util.Objects.requireNonNull;
 public class ResultsFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private RecyclerAlbumAdapter mAdapter;
+    private RecyclerResultsAdapter mAdapter;
     private ArrayList<Album> mArrayList = new ArrayList<>();
 
     //Activity callback
@@ -61,7 +61,7 @@ public class ResultsFragment extends Fragment {
         mArrayList = svModel.getAlbumResults();
         View rootView = inflater.inflate(R.layout.fragment_results, container, false);
         recyclerView = rootView.findViewById(R.id.recyclerView);
-        mAdapter = new RecyclerAlbumAdapter(mArrayList);
+        mAdapter = new RecyclerResultsAdapter(mArrayList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));

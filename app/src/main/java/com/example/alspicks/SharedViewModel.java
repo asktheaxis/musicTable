@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -21,6 +22,7 @@ public class SharedViewModel extends ViewModel {
     private static final String TAG = "MainActivity";
     private String albumNameEncoded;
     public ArrayList<Album> albumResults = new ArrayList<>();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     /*public SharedViewModel(MutableLiveData<String> userName) {
         this.userName = userName;

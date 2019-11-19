@@ -27,7 +27,6 @@ import com.example.alspicks.BuildConfig;
 import com.example.alspicks.R;
 import com.example.alspicks.SharedViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +35,9 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
@@ -45,7 +46,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private ImageView imageView1, imageView2, imageView3;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private int artistId = 0;
-    private ArrayList<Album> albumArrayList = new ArrayList<>();
+    private ArrayList<Album> arrayResults = new ArrayList<>();
+    private ArrayList<Album> arrayDisplayResults = new ArrayList<>();
+    private Set<String> titles = new HashSet<String>();
     //Activity callback
     private ActivityCallback mCallback;
     private static final String TAG = "MainActivity";
@@ -81,14 +84,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         edtArtist = root.findViewById(R.id.edtArtist);
         edtAlbum = root.findViewById(R.id.edtAlbum);
 
-        //for testing
-        imageView1 = root.findViewById(R.id.imageView3);
-        imageView2 = root.findViewById(R.id.imageView4);
-        imageView3 = root.findViewById(R.id.imageView5);
-
         //all our buttons should use the same on click, each has it's own case below
         Button btnSave = root.findViewById(R.id.BtnSearch);
         btnSave.setOnClickListener(this);
+        Button btnAccount = root.findViewById(R.id.btnAccount);
+        btnAccount.setOnClickListener(this);
 
 
         return root;
@@ -100,9 +100,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.BtnSearch) {
-            addAlbum();
-
+            addAlbum();}
+        if (v.getId() == R.id.btnAccount){
+            mCallback.openAccountFragment();
         }
+
     }
 
 
@@ -178,7 +180,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             } catch (UnsupportedEncodingException e) {
                 Log.w(TAG, "Error encoding URL", e);
             }
-            String url = "https://api.discogs.com/artists/" + idEncoded + "/releases?sort=year&sort_order=asc&key=" + BuildConfig.CONSUMER_KEY + "&secret=" + BuildConfig.CONSUMER_SECRET;
+            String url = "https://api.discogs.com/artists/" + idEncoded + "/releases?sort=year&sort_order=asc&per_page=100&key=" + BuildConfig.CONSUMER_KEY + "&secret=" + BuildConfig.CONSUMER_SECRET;
             return url;
         }
     }
@@ -199,13 +201,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             try {
                                 if (!jsonObject.getString("title").isEmpty() && !jsonObject.getString("year").isEmpty()
-                                        && !jsonObject.getString("cover_image").isEmpty() && !jsonObject.getJSONArray("style").isNull(0)
+                                        && !jsonObject.getString("thumb").isEmpty() && !jsonObject.getJSONArray("style").isNull(0)
                                         && !jsonObject.getJSONArray("genre").isNull(0)) {
                                     Log.w("Discogs Album result ", jsonObject.toString());
                                     String artist, album, year, title, url;
                                     ArrayList<String> styles = new ArrayList<>();
                                     ArrayList<String> genres = new ArrayList<>();
-                                    url = jsonObject.getString("cover_image");
+                                    url = jsonObject.getString("thumb");
                                     title = jsonObject.getString("title");
                                     String[] parseString = title.split(" - ", 2);
                                     artist = parseString[0];
@@ -218,16 +220,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                                         genres.add(jsonObject.getJSONArray("genre").getString(k));
                                     }
                                     Album albuml = new Album(artist, album, year, styles, genres, url);
-                                    albumArrayList.add(albuml);
+                                    arrayResults.add(albuml);
                                 }
                             } catch (JSONException e){
                                 Log.w("Result was not an album", e);
                             }
                         }
+                        for (Album item : arrayResults) {
+                            if (titles.add(item.year)){
+                                arrayDisplayResults.add(item); //FIXME
+                            }
+                        }
                     } catch (JSONException e) {
                         openAlbumDialog();
                     }
-                    mCallback.openResultsFragment(albumArrayList);
+                    mCallback.openResultsFragment(arrayDisplayResults);
 
                     },
                 error -> Log.w("Error requesting Json data", error.toString())
@@ -271,17 +278,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     try {
                         JSONArray jsonArray = response.getJSONArray("releases");
                         ArrayList<String> urls = new ArrayList<>();
-                        for (int i = 0; i < 4; i++) {
+                        for (int i = 0; i < 100; i++) {
+                            String urll, artist, album, year;
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            String url1 = jsonObject.getString("thumb");
-                            urls.add(url1);
+                            if (jsonObject.getString("type").equals("master")){
+                                urll = jsonObject.getString("thumb");
+                                artist = jsonObject.getString("artist");
+                                album = jsonObject.getString("title");
+                                year = jsonObject.getString("year");
+                                Album albuml = new Album(artist, album, year, urll);
+                                arrayResults.add(albuml);
+                            }
                         }
-                        Picasso.with(getContext()).load(urls.get(0)).fit().into(imageView1);
-                        Picasso.with(getContext()).load(urls.get(1)).fit().into(imageView2);
-                        Picasso.with(getContext()).load(urls.get(2)).fit().into(imageView3);
                     } catch (JSONException e) {
                         Log.w("No albums found with that artistID", e);
                     }
+                    mCallback.openResultsFragment(arrayResults);
                 },
                 error -> Log.w("Error requesting Json data", error.toString())
         );
