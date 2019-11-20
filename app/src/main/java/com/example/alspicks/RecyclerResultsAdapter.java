@@ -1,9 +1,7 @@
 package com.example.alspicks;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.alspicks.ui.home.ResultsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -123,6 +120,7 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
                         album.put("name", a.name);
                         album.put("year", a.year);
                         album.put("style", a.style);
+                        album.put("genre", a.genre);
 
                         album.put("sender", user.getUid());
                         album.put("receiver", task);

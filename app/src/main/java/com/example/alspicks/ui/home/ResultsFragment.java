@@ -69,15 +69,6 @@ public class ResultsFragment extends Fragment {
 
         mArrayList = svModel.getAlbumResults();
         mAdapter.notifyDataSetChanged();
-        /*RecyclerView.LayoutManager mlayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(mlayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new RecyclerAlbumAdapter(mArrayList);
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-
-        mArrayList = svModel.getAlbumResults();
-        mAdapter.notifyDataSetChanged();*/
         return rootView;
     }
 }

@@ -132,28 +132,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             searchArtist(searchType, query);
         }
 
-        /*// Create a new album with Artist, Album, Year, and Genre
-        final Map<String, Object> album = new HashMap<>();
-        album.put("artist", albumArtist);
-        album.put("name", albumName);
-        album.put("year", albumYear);
-        album.put("style", albumStyle);
-        album.put("origUser", sharedViewModel.getUid());*/
-
-
-        // Add a new document with a generated ID
-        /*if(!userID.equals("")){
-            db.collection("albums")
-                    .document(albumName)
-                    .set(album)
-                    .addOnSuccessListener(documentReference -> {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                        albumAdded.show();
-                    })
-                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
-
-        }*/
-
     }
 
     private String createSearchURL(String search, String query){

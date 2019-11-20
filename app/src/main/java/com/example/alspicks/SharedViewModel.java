@@ -24,10 +24,6 @@ public class SharedViewModel extends ViewModel {
     public ArrayList<Album> albumResults = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    /*public SharedViewModel(MutableLiveData<String> userName) {
-        this.userName = userName;
-    }*/
-
     public SharedViewModel(){
         userTextBox = new MutableLiveData<>();
     }
