@@ -153,6 +153,17 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
                                 })
                                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
+                        //Add new document to senders OUTGOING sub-collection
+                        db.collection("Users")
+                                .document(username)
+                                .collection("Outgoing")
+                                .document(a.name)
+                                .set(album)
+                                .addOnSuccessListener(documentReference -> {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                })
+                                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+
 
                     }
                 })
