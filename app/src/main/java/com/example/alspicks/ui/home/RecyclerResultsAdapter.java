@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.alspicks.ActivityCallback;
@@ -27,12 +28,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResultsAdapter.ResultsViewHolder> {
 
-    private SharedViewModel sharedViewModel;
+    public SharedViewModel sharedViewModel;
     private ArrayList<Album> albumArrayList;
     private Context context;
     private String m_text = "";
+    protected String userName;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "MainActivity";
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -59,6 +63,7 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
     @Override
     public ResultsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.results_layout, parent, false);
+
         return new ResultsViewHolder(itemView);
     }
 
@@ -117,7 +122,8 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String task = String.valueOf(taskEditText.getText());
-                        String username = sharedViewModel.buildUserName();
+
+                        String username = buildUserName();
 
 
                         final Map<String, Object> album = new HashMap<>();
@@ -142,16 +148,19 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
                                 })
                                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
-                        //Add new document to senders INCOMING sub-collection
+                        /* TODO: .document(username) needs to be .document(receiverUID)
+                            // need to get the UID that matches the input email
+                        //Add new document to receivers INCOMING sub-collection
                         db.collection("Users")
-                                .document(username)
+                                .document(username)// TODO: here
                                 .collection("Incoming")
                                 .document(a.name)
                                 .set(album)
                                 .addOnSuccessListener(documentReference -> {
                                     Log.d(TAG, "DocumentSnapshot successfully written!");
                                 })
-                                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));*/
+
 
                         //Add new document to senders OUTGOING sub-collection
                         db.collection("Users")
@@ -172,6 +181,12 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
         dialog.show();
     }
 
+    public String buildUserName(){
+        String email = user.getEmail();
+        int index = email.indexOf('@');
+        String userName = email.substring(0, index);
+        return userName;
+    }
 
 
 
