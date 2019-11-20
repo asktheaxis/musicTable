@@ -36,15 +36,15 @@ public class Album implements Collection<Album>{
         this.coverImage = coverImage;
     }
 
-    String getName(){
+    public String getName(){
         return name;
     }
 
-    String getArtist(){
+    public String getArtist(){
         return artist;
     }
 
-    String getYear(){
+    public String getYear(){
         return year;
     }
 

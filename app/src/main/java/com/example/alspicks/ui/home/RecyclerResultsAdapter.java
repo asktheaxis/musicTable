@@ -1,9 +1,7 @@
-package com.example.alspicks;
+package com.example.alspicks.ui.home;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.alspicks.ui.home.ResultsFragment;
+import com.example.alspicks.ActivityCallback;
+import com.example.alspicks.Album;
+import com.example.alspicks.R;
+import com.example.alspicks.SharedViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -116,6 +117,7 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String task = String.valueOf(taskEditText.getText());
+                        String username = sharedViewModel.buildUserName();
 
 
                         final Map<String, Object> album = new HashMap<>();
@@ -129,17 +131,27 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
 
 
 
-                        // Add a new document with a generated ID
+                        // Add a new document to master Albums Collection
 
-            db.collection("albums")
-                    .document(a.name)
-                    .set(album)
-                    .addOnSuccessListener(documentReference -> {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                        //albumAdded.show();
-                    })
-                    .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                        db.collection("albums")
+                                .document(a.name)
+                                .set(album)
+                                .addOnSuccessListener(documentReference -> {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                    //albumAdded.show();
+                                })
+                                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
+                        //Add new document to senders INCOMING sub-collection
+                        db.collection("Users")
+                                .document(username)
+                                .collection("Incoming")
+                                .document(a.name)
+                                .set(album)
+                                .addOnSuccessListener(documentReference -> {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                })
+                                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 
 
                     }

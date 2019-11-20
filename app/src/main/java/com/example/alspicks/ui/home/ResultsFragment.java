@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.alspicks.ActivityCallback;
 import com.example.alspicks.Album;
 import com.example.alspicks.R;
-import com.example.alspicks.RecyclerResultsAdapter;
 import com.example.alspicks.SharedViewModel;
 
 import java.util.ArrayList;
