@@ -9,6 +9,7 @@ import com.example.alspicks.ui.account.AccountFragment;
 import com.example.alspicks.ui.dashboard.DashboardFragment;
 import com.example.alspicks.ui.home.HomeFragment;
 import com.example.alspicks.ui.home.ResultsFragment;
+import com.example.alspicks.ui.notifications.NotificationsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -87,6 +88,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, HomeFragment.newInstance())
+                .commit();
+    }
+
+    @Override
+    public void openNotificationsFragment(){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, NotificationsFragment.newInstance())
                 .commit();
     }
 

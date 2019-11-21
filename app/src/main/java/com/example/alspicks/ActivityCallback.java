@@ -12,6 +12,7 @@ public interface ActivityCallback {
 
     void openAccountFragment();
     void openLoginFragment();
+    void openNotificationsFragment();
 
 
 

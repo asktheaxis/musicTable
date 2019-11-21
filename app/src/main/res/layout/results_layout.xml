@@ -49,15 +49,15 @@
 
     <TextView
         android:id="@+id/tvYear"
-        android:layout_width="59dp"
-        android:layout_height="17dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="60dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="10dp"
+        android:gravity="center"
         android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/tvAlbum"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/tvAlbum"
-        app:layout_constraintTop_toTopOf="@+id/tvArtist" />
+        app:layout_constraintStart_toEndOf="@+id/tvAlbum" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
