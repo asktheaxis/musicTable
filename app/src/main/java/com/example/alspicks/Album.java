@@ -29,6 +29,13 @@ public class Album implements Collection<Album>{
         this.coverImage = coverImage;
     }
 
+    public Album(String artist, String name, String year, String coverImage) {
+        this.name = name;
+        this.artist = artist;
+        this.year = year;
+        this.coverImage = coverImage;
+    }
+
     String getName(){
         return name;
     }

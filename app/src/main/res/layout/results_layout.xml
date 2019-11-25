@@ -1,62 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/constraintView">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ImageButton
         android:id="@+id/albumButton"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="album cover"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@mipmap/ic_launcher_round"
-        android:contentDescription="album cover" />
+        app:layout_constraintVertical_bias="0.011"
+        app:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
         android:id="@+id/tvArtist"
         android:layout_width="wrap_content"
+        android:maxWidth="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
         android:text="TextView"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tvStyle"
-        app:layout_constraintStart_toEndOf="@+id/albumButton" />
+        app:layout_constraintStart_toEndOf="@+id/albumButton"
+        tools:layout_editor_absoluteY="15dp" />
 
     <TextView
         android:id="@+id/tvAlbum"
         android:layout_width="wrap_content"
+        android:maxWidth="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="3dp"
         android:text="TextView"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tvArtist"
+        app:layout_constraintStart_toEndOf="@+id/albumButton"
         app:layout_constraintTop_toBottomOf="@+id/tvArtist"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.001" />
 
     <TextView
         android:id="@+id/tvYear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="59dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="28dp"
         android:text="TextView"
-        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.064"
-        app:layout_constraintStart_toEndOf="@+id/tvArtist"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tvAlbum"
+        app:layout_constraintTop_toTopOf="@+id/tvArtist" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

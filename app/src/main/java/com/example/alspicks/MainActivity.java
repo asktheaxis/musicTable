@@ -4,16 +4,11 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.alspicks.ui.account.AccountFragment;
 import com.example.alspicks.ui.dashboard.DashboardFragment;
 import com.example.alspicks.ui.home.HomeFragment;
 import com.example.alspicks.ui.home.ResultsFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
