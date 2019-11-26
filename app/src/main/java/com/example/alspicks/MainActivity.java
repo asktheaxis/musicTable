@@ -99,5 +99,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
                 .commit();
     }
 
+    @Override
+    public void onSucess(String result) {
+        sharedViewModel.setAlbumResource(result);
+    }
+
 
 }

@@ -14,26 +14,29 @@ public class Album implements Collection<Album>{
     public String artist;
     public String year;
     public String coverImage;
+    public String resource;
     public ArrayList<String> style;
     public ArrayList<String> genre;
 
 
     public Album(){}
 
-    public Album(String artist, String name, String year, ArrayList<String> style, ArrayList<String> genre, String coverImage){
+    public Album(String artist, String name, String year, ArrayList<String> style, ArrayList<String> genre, String coverImage, String albumResource){
         this.name = name;
         this.artist = artist;
         this.year = year;
         this.style = style;
         this.genre = genre;
         this.coverImage = coverImage;
+        this.resource = albumResource;
     }
 
-    public Album(String artist, String name, String year, String coverImage) {
+    public Album(String artist, String name, String year, String coverImage, String albumResource) {
         this.name = name;
         this.artist = artist;
         this.year = year;
         this.coverImage = coverImage;
+        this.resource = albumResource;
     }
 
     String getName(){

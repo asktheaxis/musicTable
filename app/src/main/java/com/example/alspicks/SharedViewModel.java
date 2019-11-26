@@ -20,7 +20,7 @@ public class SharedViewModel extends ViewModel {
     private MutableLiveData<String> userTextBox;
     String userName;
     private static final String TAG = "MainActivity";
-    private String albumNameEncoded;
+    private String albumNameEncoded, albumResource;
     public ArrayList<Album> albumResults = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -86,6 +86,14 @@ public class SharedViewModel extends ViewModel {
         }
         String url = "http://api.discogs.com/database/search?type=album&q=" + albumNameEncoded;
         return url;
+    }
+
+    public void setAlbumResource(String url){
+        albumResource = url;
+    }
+
+    public String getAlbumResources(){
+        return albumResource;
     }
 
 }

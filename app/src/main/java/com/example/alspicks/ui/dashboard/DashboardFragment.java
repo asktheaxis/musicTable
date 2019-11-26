@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,7 +25,6 @@ import com.example.alspicks.AlbumDialog;
 import com.example.alspicks.ArtistDialog;
 import com.example.alspicks.BuildConfig;
 import com.example.alspicks.R;
-import com.example.alspicks.SharedViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONArray;
@@ -53,6 +51,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener{
     //Activity callback
     private ActivityCallback mCallback;
     private static final String TAG = "MainActivity";
+    private String masterUri;
 
 
 
@@ -118,15 +117,12 @@ public class DashboardFragment extends Fragment implements View.OnClickListener{
 
 
     private void addAlbum() {
-
-        SharedViewModel sharedViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(SharedViewModel.class);
         final String artistInput = edtArtist.getText().toString();
         final String albumInput = edtAlbum.getText().toString();
-        final String userID = sharedViewModel.getUid();
-        final String albumPath;
-
         String searchType;
         String query;
+
+        //
         if (!artistInput.equals("") && !albumInput.equals("")){
             searchType = "title";
             query = artistInput + " - " + albumInput;
@@ -190,11 +186,13 @@ public class DashboardFragment extends Fragment implements View.OnClickListener{
                                         && !jsonObject.getString("thumb").isEmpty() && !jsonObject.getJSONArray("style").isNull(0)
                                         && !jsonObject.getJSONArray("genre").isNull(0)) {
                                     Log.w("Discogs Album result ", jsonObject.toString());
-                                    String artist, album, year, title, url;
+                                    String artist, album, year, title, url, masterUrl;
                                     ArrayList<String> styles = new ArrayList<>();
                                     ArrayList<String> genres = new ArrayList<>();
                                     url = jsonObject.getString("thumb");
                                     title = jsonObject.getString("title");
+                                    masterUrl = jsonObject.getString("master_url");
+                                    getMasterUrl(masterUrl);
                                     String[] parseString = title.split(" - ", 2);
                                     artist = parseString[0];
                                     album = parseString[1];
@@ -205,7 +203,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener{
                                     for (int k = 0; k < jsonObject.getJSONArray("genre").length(); k++){
                                         genres.add(jsonObject.getJSONArray("genre").getString(k));
                                     }
-                                    Album albuml = new Album(artist, album, year, styles, genres, url);
+                                    Album albuml = new Album(artist, album, year, styles, genres, url, masterUri);
                                     arrayResults.add(albuml);
                                 }
                             } catch (JSONException e){
@@ -264,14 +262,16 @@ public class DashboardFragment extends Fragment implements View.OnClickListener{
                     try {
                         JSONArray jsonArray = response.getJSONArray("releases");
                         for (int i = 0; i < 100; i++) {
-                            String urll, artist, album, year;
+                            String urll, artist, album, year, masterUrl;
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             if (jsonObject.getString("type").equals("master")){
                                 urll = jsonObject.getString("thumb");
+                                masterUrl = jsonObject.getString("resource_url");
+                                getMasterUrl(masterUrl);
                                 artist = jsonObject.getString("artist");
                                 album = jsonObject.getString("title");
                                 year = jsonObject.getString("year");
-                                Album albuml = new Album(artist, album, year, urll);
+                                Album albuml = new Album(artist, album, year, urll, masterUri);
                                 arrayResults.add(albuml);
                             }
                         }
@@ -279,6 +279,27 @@ public class DashboardFragment extends Fragment implements View.OnClickListener{
                         Log.w("No albums found with that artistID", e);
                     }
                     mCallback.openResultsFragment(arrayResults);
+                },
+                error -> Log.w("Error requesting Json data", error.toString())
+        );
+        requestQueue.add(objectRequest);
+    }
+
+    public void getMasterUrl(String url){
+        RequestQueue requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> {
+                    Log.w("Retrieving album's master url ", response.toString());
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("uri");
+                        masterUri = jsonArray.getString(0);
+                        mCallback.onSucess(masterUri);
+                    } catch (JSONException e) {
+                        Log.w("No uri found with for this album", e);
+                    }
                 },
                 error -> Log.w("Error requesting Json data", error.toString())
         );

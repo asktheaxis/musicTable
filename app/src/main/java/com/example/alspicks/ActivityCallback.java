@@ -14,7 +14,7 @@ public interface ActivityCallback {
     void openLoginFragment();
     void openNotificationsFragment();
 
-
+    void onSucess(String result);
 
 
 }

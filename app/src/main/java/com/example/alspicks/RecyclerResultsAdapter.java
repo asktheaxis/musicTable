@@ -2,12 +2,16 @@ package com.example.alspicks;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,7 +44,7 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
 
     class ResultsViewHolder extends RecyclerView.ViewHolder {
         TextView album, artist, year;
-        ImageButton albumArt;
+        ImageButton albumArt, popMenu;
 
         ResultsViewHolder(View itemView) {
             super(itemView);
@@ -48,6 +52,7 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
             artist = itemView.findViewById(R.id.tvArtist);
             year = itemView.findViewById(R.id.tvYear);
             albumArt = itemView.findViewById(R.id.albumButton);
+            popMenu = itemView.findViewById(R.id.popMenu);
         }
     }
 
@@ -73,6 +78,26 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
             public void onClick(View view) {
                 if (FirebaseAuth.getInstance().getCurrentUser() == null){showLogInDialog(holder.albumArt.getContext());}
                 else{showAddItemDialog(holder.albumArt.getContext(), album);}
+            }
+        });
+
+        holder.popMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popupMenu = new PopupMenu(holder.popMenu.getContext(), holder.popMenu);
+                popupMenu.getMenuInflater().inflate(R.menu.popup_menu_layout, popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        //discogs.com
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharedViewModel.getAlbumResources()));
+                        holder.popMenu.getContext().startActivity(browserIntent);
+                        return true;
+                    }
+                });
+
+                popupMenu.show();
             }
         });
     }
