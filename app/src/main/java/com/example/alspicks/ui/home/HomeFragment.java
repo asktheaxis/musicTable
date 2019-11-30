@@ -288,9 +288,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         requestQueue.add(objectRequest);
     }
 
-    public void openArtistDialog() {
+    public ArtistDialog openArtistDialog() {
         ArtistDialog artistDialog = new ArtistDialog();
         artistDialog.show(getFragmentManager(), "No Artists");
+        return artistDialog;
     }
 
     public void openAlbumDialog() {

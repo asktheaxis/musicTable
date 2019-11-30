@@ -1,7 +1,13 @@
 package com.example.alspicks;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -24,46 +30,31 @@ import java.util.ArrayList;
 import static java.util.Objects.requireNonNull;
 
 
-public class MainActivity extends AppCompatActivity implements ActivityCallback{
+public class MainActivity extends AppCompatActivity implements ActivityCallback {
 
     private SharedViewModel sharedViewModel;
-    private Switch switcher = findViewById(R.id.themeSwitch);
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {switcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked)
-                        setTheme(R.style.Theme_darkTheme);
-                    else
-                        setTheme(R.style.Theme_light);
-                }
-            });
-        } catch(java.lang.NullPointerException e) {
-            Toast testToast = Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT);
-            testToast.show();
-        }
 
+        themeChooser.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_main);
+        setupSpinnerItemSelection();
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container, HomeFragment.newInstance())
                     .commit();
-        }
-        else{
+        } else {
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container, AccountFragment.newInstance())
                     .commit();
 
         }
-
-
 
 
         sharedViewModel = ViewModelProviders.of(requireNonNull(this)).get(SharedViewModel.class);
@@ -73,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
 
     //Callback Methods
     @Override
-    public void openDashboardFragment(){
+    public void openDashboardFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, DashboardFragment.newInstance())
@@ -81,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
     }
 
     @Override
-    public void openAccountFragment(){
+    public void openAccountFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, AccountFragment.newInstance())
@@ -89,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
     }
 
     @Override
-    public void openLoginFragment(){
+    public void openLoginFragment() {
 
 
     }
@@ -113,5 +104,48 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
                 .commit();
     }
 
+    private void setupSpinnerItemSelection() {
+        Spinner switcher = findViewById(R.id.themeSwitch);
+        switcher.setSelection(ThemeApplication.currentPosition);
+        ThemeApplication.currentPosition = switcher.getSelectedItemPosition();
 
+        switcher.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                if (ThemeApplication.currentPosition != position) {
+                    themeChooser.changeToTheme(MainActivity.this, position);
+                }
+                ThemeApplication.currentPosition = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    /*public int darkTheme() {
+        setTheme(R.style.Theme_darkTheme);
+        TypedValue name = new TypedValue();
+        getTheme().resolveAttribute(R.attr.ThemeName, name, true);
+        if ("dark".equals(name.string))
+            return 1;
+        else
+            return 0;
+    }
+
+    public int lightTheme() {
+        setTheme(R.style.Theme_light);
+        TypedValue name = new TypedValue();
+        getTheme().resolveAttribute(R.attr.ThemeName, name, true);
+        if ("light".equals(name.string))
+            return 1;
+        else
+            return 0;
+    }*/
 }
+
+

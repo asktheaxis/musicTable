@@ -14,8 +14,8 @@
     <string name="Style">Style</string>
 
     <string-array name="theme_array">
-        <item>Material-Light</item>
-        <item>Dark-Theme</item>
+        <item>Light</item>
+        <item>Dark</item>
     </string-array>
 
     <string-array name="genre_array">

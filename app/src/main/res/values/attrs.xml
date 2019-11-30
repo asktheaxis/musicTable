@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="ThemeName" format="string" />
     <attr name="pageBackground" format="reference" />
     <attr name="accentLine" format="reference" />
     <attr name="textBoxes" format="reference" />

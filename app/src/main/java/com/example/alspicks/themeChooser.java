@@ -2,15 +2,33 @@ package com.example.alspicks;
 
 
 import android.app.Activity;
-import android.widget.Switch;
-import android.view.View;
+import android.content.Intent;
+
 
 public class themeChooser {
+    private static int sTheme;
 
-    public static void setOnCheckedChangeListener(Activity activity, Switch switch1) {
-        if(switch1.isChecked())
-            activity.setTheme(R.style.Theme_darkTheme);
-        else
-            activity.setTheme(R.style.Theme_light);
+    public final static int THEME_MATERIAL_LIGHT = 0;
+    public final static int DARK_THEME = 1;
+
+    public static void changeToTheme(Activity activity, int theme) {
+        sTheme = theme;
+        activity.finish();
+        activity.startActivity(new Intent(activity, activity.getClass()));
+        activity.overridePendingTransition(android.R.anim.fade_in,
+                android.R.anim.fade_out);
     }
+
+    public static void onActivityCreateSetTheme(Activity activity) {
+        switch (sTheme) {
+            default:
+            case THEME_MATERIAL_LIGHT:
+                activity.setTheme(R.style.Theme_light);
+                break;
+            case DARK_THEME:
+                activity.setTheme(R.style.Theme_darkTheme);
+                break;
+        }
+    }
+
 }
