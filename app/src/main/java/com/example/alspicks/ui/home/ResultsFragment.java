@@ -61,7 +61,7 @@ public class ResultsFragment extends Fragment {
         SharedViewModel svModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
         mArrayList = svModel.getAlbumResults();
         View rootView = inflater.inflate(R.layout.fragment_results, container, false);
-        recyclerView = rootView.findViewById(R.id.recyclerView);
+        recyclerView = rootView.findViewById(R.id.recyclerView1);
         mAdapter = new RecyclerResultsAdapter(mArrayList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

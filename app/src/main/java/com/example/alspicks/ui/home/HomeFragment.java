@@ -82,7 +82,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         if (v.getId() == R.id.BtnSend) {
             mCallback.openDashboardFragment();}
         if (v.getId() == R.id.BtnView){
-            mCallback.openNotificationsFragment();
+            mCallback.openDialogueFragment();
         }
 
     }

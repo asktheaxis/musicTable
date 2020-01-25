@@ -22,7 +22,9 @@ public class SharedViewModel extends ViewModel {
     private static final String TAG = "MainActivity";
     private String albumNameEncoded, albumResource;
     public ArrayList<Album> albumResults = new ArrayList<>();
+    public ArrayList<Album> userList = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String definedUser;
 
     public SharedViewModel(){
         userTextBox = new MutableLiveData<>();
@@ -34,6 +36,10 @@ public class SharedViewModel extends ViewModel {
 
     public void setUserId(FirebaseUser user) {
         uid = user.getUid();
+    }
+
+    public void setDefinedUser(String user) {
+        definedUser = user;
     }
 
     public String getUid(){
@@ -48,9 +54,17 @@ public class SharedViewModel extends ViewModel {
         albumResults = results;
     }
 
+    public void setUserList(ArrayList<Album> albums){
+        userList = albums;
+    }
+
     public ArrayList<Album> getAlbumResults() {
         return albumResults;
     }
+
+    public ArrayList<Album> getUserList() { return userList; }
+
+    public String getDefinedUser() { return definedUser; }
 
     public void signOut(){
         user = null;

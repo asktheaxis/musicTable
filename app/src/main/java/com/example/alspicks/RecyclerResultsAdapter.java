@@ -43,7 +43,7 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
     }
 
     class ResultsViewHolder extends RecyclerView.ViewHolder {
-        TextView album, artist, year;
+        TextView album, artist, year, style, genre;
         ImageButton albumArt, popMenu;
 
         ResultsViewHolder(View itemView) {
@@ -51,6 +51,8 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
             album = itemView.findViewById(R.id.tvAlbum);
             artist = itemView.findViewById(R.id.tvArtist);
             year = itemView.findViewById(R.id.tvYear);
+            style = itemView.findViewById(R.id.tvStyle);
+            genre = itemView.findViewById(R.id.tvGenre);
             albumArt = itemView.findViewById(R.id.albumButton);
             popMenu = itemView.findViewById(R.id.popMenu);
         }
@@ -70,6 +72,24 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
         holder.artist.setText(album.getArtist());
         holder.album.setText(album.getName());
         holder.year.setText(album.getYear());
+        holder.style.setText("");
+        holder.genre.setText("");
+        for (int i = 0; i < album.style.size(); i++) {
+            if (i < album.style.size() - 1) {
+                holder.style.append(album.style.get(i));
+                holder.style.append(", ");
+            } else {
+                holder.style.append(album.style.get(i));
+            }
+        }
+        for (int i = 0; i < album.genre.size(); i++) {
+            if (i < album.genre.size() - 1) {
+                holder.genre.append(album.genre.get(i));
+                holder.genre.append(", ");
+            } else {
+                holder.genre.append(album.genre.get(i));
+            }
+        }
         Picasso.with(holder.albumArt.getContext()).load(album.coverImage).into(holder.albumArt);
         holder.setIsRecyclable(false);
 
@@ -146,8 +166,9 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
                         album.put("year", a.year);
                         album.put("style", a.style);
                         album.put("genre", a.genre);
+                        album.put("coverImage", a.coverImage);
 
-                        album.put("sender", user.getUid());
+                        album.put("sender", user.getEmail());
                         album.put("receiver", task);
 
 

@@ -24,7 +24,7 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView album, artist, style, year;
+        TextView album, artist, style, year, genre;
         ImageButton albumArt;
 
         MyViewHolder(View itemView) {
@@ -32,6 +32,7 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
             album = itemView.findViewById(R.id.tvAlbum);
             artist = itemView.findViewById(R.id.tvArtist);
             style = itemView.findViewById(R.id.tvStyle);
+            genre = itemView.findViewById(R.id.tvGenre);
             year = itemView.findViewById(R.id.tvYear);
             albumArt = itemView.findViewById(R.id.albumButton);
         }
@@ -65,9 +66,23 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
         holder.artist.setText(album.getArtist());
         holder.album.setText(album.getName());
         holder.year.setText(album.getYear());
+        holder.style.setText("");
+        holder.genre.setText("");
         for (int i = 0; i < album.style.size(); i++) {
-            holder.style.append(album.style.get(i));
-            holder.style.append(", ");
+            if (i < album.style.size() - 1) {
+                holder.style.append(album.style.get(i));
+                holder.style.append(", ");
+            } else {
+                holder.style.append(album.style.get(i));
+            }
+        }
+        for (int i = 0; i < album.genre.size(); i++) {
+            if (i < album.genre.size() - 1) {
+                holder.genre.append(album.genre.get(i));
+                holder.genre.append(", ");
+            } else {
+                holder.genre.append(album.genre.get(i));
+            }
         }
         Picasso.with(holder.albumArt.getContext()).load(album.coverImage).into(holder.albumArt);
     }
