@@ -11,15 +11,19 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.alspicks.ActivityCallback;
 import com.example.alspicks.Album;
 import com.example.alspicks.R;
+import com.example.alspicks.SharedViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import static java.util.Objects.requireNonNull;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
@@ -69,6 +73,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         //all our buttons should use the same on click, each has it's own case below
         btnSend.setOnClickListener(this);
         btnView.setOnClickListener(this);
+
+        SharedViewModel svModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
+        svModel.buildCurrentUserList();
 
 
         return root;

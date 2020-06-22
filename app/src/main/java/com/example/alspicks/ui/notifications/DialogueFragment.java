@@ -7,18 +7,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.alspicks.ActivityCallback;
 import com.example.alspicks.Album;
 import com.example.alspicks.R;
 import com.example.alspicks.RecyclerResultsAdapter;
+import com.example.alspicks.SharedViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +32,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import static java.util.Objects.requireNonNull;
 
 public class DialogueFragment extends Fragment {
 
@@ -68,7 +73,8 @@ public class DialogueFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
+        View root = inflater.inflate(R.layout.fragment_dialogue, container, false);
+
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
@@ -83,21 +89,26 @@ public class DialogueFragment extends Fragment {
             public void onCallback(ArrayList<Album> albums) {
                 mCallback.openNotificationsFragment(albums);
             }
-        });
+        }, root);
 
         return root;
     }
 
-    public void readData(FirestoreCallback firestoreCallback) {
-        final EditText taskEditText = new EditText(getContext());
+    public void readData(FirestoreCallback firestoreCallback, View view) {
+        SharedViewModel svModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
+        ArrayList<String> listOfCurrentUsers = svModel.getCurrentUsers();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireNonNull(getContext()), android.R.layout.simple_dropdown_item_1line, listOfCurrentUsers);
+        final AutoCompleteTextView autoTextView = (AutoCompleteTextView) view.findViewById(R.id.autoCompleteTextView);
+        autoTextView.setAdapter(adapter);
+        autoTextView.setThreshold(1);
         AlertDialog dialog = new AlertDialog.Builder(getContext())
                 .setTitle("Who's list would you like to view?")
                 .setMessage("Enter an email")
-                .setView(taskEditText)
+                .setView(autoTextView)
                 .setPositiveButton("View", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        user = String.valueOf(taskEditText.getText());
+                        user = String.valueOf(autoTextView.getText());
                         db.collection("albums")
                                 .whereEqualTo("receiver", currentUser.getEmail())
                                 .whereEqualTo("sender", user)
@@ -128,6 +139,8 @@ public class DialogueFragment extends Fragment {
                 })
                 .setNegativeButton("Cancel", null)
                 .create();
+        //dialog.show();
+        ((ViewGroup)autoTextView.getParent()).removeView(autoTextView);
         dialog.show();
     }
 

@@ -61,7 +61,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     //override the onAttach and onDetach methods in fragment lifecycle
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mCallback = (ActivityCallback) context;
     }
