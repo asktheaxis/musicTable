@@ -9,11 +9,14 @@ public interface ActivityCallback {
     void openHomeFragment();
 
     void openDashboardFragment();
-
+    void openDialogueFragment();
     void openAccountFragment();
     void openLoginFragment();
+    void openNotificationsFragment(ArrayList<Album> albums);
 
+    void onSucess(String result);
 
+    void onComplete(ArrayList<Album> albums);
 
 
 }

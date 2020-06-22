@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -60,7 +61,7 @@ public class ResultsFragment extends Fragment {
         SharedViewModel svModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
         mArrayList = svModel.getAlbumResults();
         View rootView = inflater.inflate(R.layout.fragment_results, container, false);
-        recyclerView = rootView.findViewById(R.id.recyclerView);
+        recyclerView = rootView.findViewById(R.id.recyclerView1);
         mAdapter = new RecyclerResultsAdapter(mArrayList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -69,6 +70,14 @@ public class ResultsFragment extends Fragment {
 
         mArrayList = svModel.getAlbumResults();
         mAdapter.notifyDataSetChanged();
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                mCallback.openDashboardFragment();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
         return rootView;
     }
 }

@@ -9,6 +9,8 @@ import com.example.alspicks.ui.account.AccountFragment;
 import com.example.alspicks.ui.dashboard.DashboardFragment;
 import com.example.alspicks.ui.home.HomeFragment;
 import com.example.alspicks.ui.home.ResultsFragment;
+import com.example.alspicks.ui.notifications.DialogueFragment;
+import com.example.alspicks.ui.notifications.NotificationsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -88,6 +90,33 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
                 .beginTransaction()
                 .replace(R.id.container, HomeFragment.newInstance())
                 .commit();
+    }
+
+    @Override
+    public void openNotificationsFragment(ArrayList<Album> albums){
+        sharedViewModel.setUserList(albums);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, NotificationsFragment.newInstance())
+                .commit();
+    }
+
+    @Override
+    public void openDialogueFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, DialogueFragment.newInstance())
+                .commit();
+    }
+
+    @Override
+    public void onSucess(String result) {
+        sharedViewModel.setAlbumResource(result);
+    }
+
+    @Override
+    public void onComplete(ArrayList<Album> albums){
+        sharedViewModel.setUserList(albums);
     }
 
 
