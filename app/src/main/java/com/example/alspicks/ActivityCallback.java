@@ -13,6 +13,7 @@ public interface ActivityCallback {
     void openAccountFragment();
     void openLoginFragment();
     void openNotificationsFragment(ArrayList<Album> albums);
+    void openSpotifyFragment();
 
     void onSucess(String result);
 

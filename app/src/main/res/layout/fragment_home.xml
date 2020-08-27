@@ -24,9 +24,17 @@
 
     <Button
         android:id="@+id/BtnView"
-        android:layout_width="172dp"
-        android:layout_height="59dp"
+        android:layout_width="156dp"
+        android:layout_height="56dp"
         android:layout_gravity="center"
         android:maxWidth="200dp"
         android:text="View recommendations" />
+
+    <Button
+        android:id="@+id/BtnSpotify"
+        android:layout_width="156dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:maxWidth="200dp"
+        android:text="Spotify Library Management" />
 </LinearLayout>
