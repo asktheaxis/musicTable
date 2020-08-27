@@ -17,6 +17,8 @@ public class Album implements Collection<Album>{
     public String resource;
     public ArrayList<String> style;
     public ArrayList<String> genre;
+    public ArrayList<String> defaultStyle;
+    public ArrayList<String> defaultGenre;
 
 
     public Album(){}
@@ -46,6 +48,13 @@ public class Album implements Collection<Album>{
         this.year = year;
         this.coverImage = coverImage;
         this.resource = albumResource;
+        defaultStyle = new ArrayList<>();
+        defaultStyle.add("--");
+        defaultGenre = new ArrayList<>();
+        defaultGenre.add("--");
+
+        this.genre = defaultGenre;
+        this.style = defaultStyle;
     }
 
     String getName(){

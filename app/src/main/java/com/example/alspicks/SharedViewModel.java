@@ -111,6 +111,7 @@ public class SharedViewModel extends ViewModel {
     }
 
     public void setAlbumResource(String url){
+
         albumResource = url;
     }
 
