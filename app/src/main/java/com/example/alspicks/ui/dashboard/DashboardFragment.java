@@ -87,8 +87,6 @@ public class DashboardFragment extends Fragment implements View.OnClickListener{
         //all our buttons should use the same on click, each has it's own case below
         Button btnSave = root.findViewById(R.id.BtnSearch);
         btnSave.setOnClickListener(this);
-        Button btnAccount = root.findViewById(R.id.btnAccount);
-        btnAccount.setOnClickListener(this);
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
@@ -109,9 +107,6 @@ public class DashboardFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         if (v.getId() == R.id.BtnSearch) {
             addAlbum();}
-        if (v.getId() == R.id.btnAccount){
-            mCallback.openAccountFragment();
-        }
 
     }
 
@@ -262,7 +257,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener{
                     try {
                         JSONArray jsonArray = response.getJSONArray("releases");
                         for (int i = 0; i < 100; i++) {
-                            String urll, artist, album, year, masterUrl;
+                            String urll, artist, album, year, masterUrl, style;
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             if (jsonObject.getString("type").equals("master")){
                                 urll = jsonObject.getString("thumb");
@@ -271,7 +266,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener{
                                 artist = jsonObject.getString("artist");
                                 album = jsonObject.getString("title");
                                 year = jsonObject.getString("year");
-                                Album albuml = new Album(artist, album, year, urll, masterUri);
+                                Album albuml = new Album(artist, album, year, urll, masterUrl);
                                 arrayResults.add(albuml);
                             }
                         }

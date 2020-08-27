@@ -67,6 +67,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
+
         btnSend = root.findViewById(R.id.BtnSend);
         btnView = root.findViewById(R.id.BtnView);
 

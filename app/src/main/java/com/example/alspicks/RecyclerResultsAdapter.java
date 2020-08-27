@@ -18,14 +18,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResultsAdapter.ResultsViewHolder> {
 
@@ -33,6 +41,7 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
     private ArrayList<Album> albumArrayList;
     private Context context;
     private String m_text = "";
+    private String albumAPI, masterUri;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "MainActivity";
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -68,7 +77,10 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
     @Override
     public void onBindViewHolder(ResultsViewHolder holder, final int position) {
 
+        String resource;
         Album album = albumArrayList.get(position);
+        resource = album.resource;
+        albumAPI = album.resource;
         holder.artist.setText(album.getArtist());
         holder.album.setText(album.getName());
         holder.year.setText(album.getYear());
@@ -191,6 +203,27 @@ public class RecyclerResultsAdapter extends RecyclerView.Adapter<RecyclerResults
                 .setNegativeButton("Cancel", null)
                 .create();
         dialog.show();
+    }
+
+    public void getAlbumURL() {
+        RequestQueue requestQueue = Volley.newRequestQueue(Objects.requireNonNull(context));
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                albumAPI,
+                null,
+                response -> {
+                    Log.w("Retrieving album's master url ", response.toString());
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("uri");
+                        masterUri = jsonArray.getString(0);
+                        mCallback.onSucess(masterUri);
+                    } catch (JSONException e) {
+                        Log.w("No uri found with for this album", e);
+                    }
+                },
+                error -> Log.w("Error requesting Json data", error.toString())
+        );
+        requestQueue.add(objectRequest);
     }
 
 
