@@ -11,6 +11,8 @@ import com.example.alspicks.ui.home.HomeFragment;
 import com.example.alspicks.ui.home.ResultsFragment;
 import com.example.alspicks.ui.notifications.DialogueFragment;
 import com.example.alspicks.ui.notifications.NotificationsFragment;
+import com.example.alspicks.ui.spotify.LibraryFragment;
+import com.example.alspicks.ui.spotify.SpotifyFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -106,6 +108,23 @@ public class MainActivity extends AppCompatActivity implements ActivityCallback{
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, DialogueFragment.newInstance())
+                .commit();
+    }
+
+    @Override
+    public void openSpotifyFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, SpotifyFragment.newInstance())
+                .commit();
+    }
+
+    @Override
+    public void openLibraryFragment(ArrayList<SpotifyFragment.SpotifyAlbum> albums) {
+        sharedViewModel.setUserLibraryAlbums(albums);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, LibraryFragment.newInstance())
                 .commit();
     }
 

@@ -28,7 +28,7 @@ import static java.util.Objects.requireNonNull;
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
-    private Button btnSend, btnView;
+    private Button btnSend, btnView, btnSpotify;
     private ImageView imageView1, imageView2, imageView3;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private int artistId = 0;
@@ -70,10 +70,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         btnSend = root.findViewById(R.id.BtnSend);
         btnView = root.findViewById(R.id.BtnView);
+        btnSpotify = root.findViewById(R.id.BtnSpotify);
 
         //all our buttons should use the same on click, each has it's own case below
         btnSend.setOnClickListener(this);
         btnView.setOnClickListener(this);
+        btnSpotify.setOnClickListener(this);
 
         SharedViewModel svModel = ViewModelProviders.of(requireNonNull(getActivity())).get(SharedViewModel.class);
         svModel.buildCurrentUserList();
@@ -91,6 +93,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             mCallback.openDashboardFragment();}
         if (v.getId() == R.id.BtnView){
             mCallback.openDialogueFragment();
+        }
+        if (v.getId() == R.id.BtnSpotify){
+            mCallback.openSpotifyFragment();
         }
 
     }
