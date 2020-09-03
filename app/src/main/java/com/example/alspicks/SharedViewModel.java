@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.alspicks.ui.spotify.SpotifyFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +30,7 @@ public class SharedViewModel extends ViewModel {
     private String albumNameEncoded, albumResource;
     private ArrayList<Album> albumResults = new ArrayList<>();
     private ArrayList<Album> userList = new ArrayList<>();
+    private ArrayList<SpotifyFragment.SpotifyAlbum> userLibraryAlbums = new ArrayList<>();
     private ArrayList<String> currentUsers = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String definedUser;
@@ -64,6 +66,12 @@ public class SharedViewModel extends ViewModel {
 
     public void setUserList(ArrayList<Album> albums){
         userList = albums;
+    }
+
+    public void setUserLibraryAlbums(ArrayList<SpotifyFragment.SpotifyAlbum> albums) { userLibraryAlbums = albums; }
+
+    public ArrayList<SpotifyFragment.SpotifyAlbum> getUserLibraryAlbums() {
+        return userLibraryAlbums;
     }
 
     public ArrayList<Album> getAlbumResults() {
