@@ -16,25 +16,31 @@
 
     <Button
         android:id="@+id/BtnSend"
+        style="@style/appButtons"
         android:layout_width="156dp"
         android:layout_height="56dp"
         android:layout_gravity="center"
         android:maxWidth="200dp"
-        android:text="Send a recommendation" />
+        android:text="@string/send_a_recommendation" />
 
     <Button
         android:id="@+id/BtnView"
+        style="@style/appButtons"
         android:layout_width="156dp"
         android:layout_height="56dp"
+        android:layout_marginTop="8dp"
         android:layout_gravity="center"
         android:maxWidth="200dp"
-        android:text="View recommendations" />
+        android:text="@string/view_recommendations" />
 
     <Button
         android:id="@+id/BtnSpotify"
+        style="@style/appButtons"
         android:layout_width="156dp"
         android:layout_height="56dp"
+        android:layout_marginTop="8dp"
         android:layout_gravity="center"
         android:maxWidth="200dp"
-        android:text="Spotify Library Management" />
+        android:text="@string/spotify_library_management" />
+
 </LinearLayout>

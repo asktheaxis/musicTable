@@ -36,5 +36,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="send_a_recommendation">Send a recommendation</string>
+    <string name="view_recommendations">View recommendations</string>
+    <string name="spotify_library_management">Spotify Library Management</string>
 
 </resources>

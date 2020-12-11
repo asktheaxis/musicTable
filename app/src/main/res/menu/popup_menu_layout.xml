@@ -2,4 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/discogs"
         android:title="View on discogs.com" />
+    <item android:id="@+id/send_popup"
+        android:title="Send"
+        android:onClick="openDashboardFragment"/>
 </menu>
